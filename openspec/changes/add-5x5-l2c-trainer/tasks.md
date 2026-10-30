@@ -1,0 +1,34 @@
+# Tasks
+
+## 1. Project setup
+
+- [ ] 1.1 Scaffold Vite + TypeScript + Vitest (jsdom) app with `npm test`, `npm run build` and `npm run dev`; verify a placeholder test passes and the build produces `dist/`
+
+## 2. 5x5 cube model
+
+- [ ] 2.1 Implement move parsing and formatting (faces, `w`, slices M/E/S, `'`, `2`, brackets ignored), inversion and simplification (merge/cancel adjacent same-layer turns); verify with unit tests
+- [ ] 2.2 Implement the 5x5 sticker simulator with outer, wide and slice moves on all axes; verify with tests (four quarter turns = identity, R U R' U' order, known centre effects of Rw and M, outer turns keep centres)
+- [ ] 2.3 Implement whole-cube rotation rewriting of moves (sheet frame → chosen face pair); verify by simulation that rewritten algs act on the rotated faces
+
+## 3. Case data and scramble generator
+
+- [ ] 3.1 Add the 19 sheet algs as case data; verify by tests that each inverse alg changes only U/F centres, keeps F's left 2x3 block, and that the 19 patterns are distinct and none is solved
+- [ ] 3.2 Implement the scramble generator (prefix, face pair, rewritten inverse alg, face orientation turns, simplification, case details); verify by simulation over every case × face pair × orientation that the specs' resulting-state requirements hold, plus seeded statistical tests for case, pair, role and orientation coverage and the prefix rules
+
+## 4. App shell and navigation
+
+- [ ] 4.1 Implement the puzzle/trainer registry, hash router, home page, breadcrumb and not-found page; verify with DOM tests for each trainer-navigation scenario
+
+## 5. L2C trainer screen
+
+- [ ] 5.1 Implement the SVG case renderer (two faces, centres coloured, ring grey); verify with tests that rendered sticker colours match a simulated state
+- [ ] 5.2 Implement the trainer screen (scramble with holding reminder, Show case with picture, labels, y-rotation hint, reference picture and alg, Next button and space bar); verify with DOM tests for each l2c-trainer-session scenario
+- [ ] 5.3 Add responsive styles and check the screen at 375px wide has no horizontal scroll (Playwright screenshot check)
+
+## 6. Integration
+
+- [ ] 6.1 Add README (run, test, build) and verify `npm ci && npm test && npm run build` succeeds from clean
+
+## Workflow follow-up
+
+- Archive the change after the PR is merged.

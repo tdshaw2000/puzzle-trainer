@@ -1,0 +1,45 @@
+# Spec Delta
+
+## Purpose
+
+Defines the practice loop on the 5x5 Last Two Centres screen: show a scramble, let the user reveal the target case after solving, then move on to the next scramble.
+
+## ADDED Requirements
+
+### Requirement: A scramble is shown on arrival
+When the Last Two Centres screen opens, it SHALL show a freshly generated scramble, together with the reminder to hold the cube with yellow on top and green in front.
+
+#### Scenario: Opening the trainer
+- **WHEN** the user opens 5x5 › Last Two Centres
+- **THEN** a scramble is displayed in a large, readable font
+- **AND** the case is not yet shown
+
+### Requirement: The target case can be revealed
+The screen SHALL offer a "Show case" action. Using it SHALL reveal the case for the current scramble:
+- a picture of the two case faces as they look after the scramble (centres coloured, the outer ring neutral), drawn with white at the bottom;
+- the face positions and colours;
+- the y rotation (none, y, y' or y2) that brings the left face of the pair to the front;
+- the sheet's reference picture and alg.
+
+#### Scenario: Revealing the case
+- **WHEN** the user selects "Show case"
+- **THEN** the case picture, face labels, rotation hint and reference alg for the current scramble are shown
+
+#### Scenario: Picture matches the scramble
+- **WHEN** the case is revealed
+- **THEN** every centre sticker in the picture has the colour that face position has after applying the scramble to a solved cube held yellow-top, green-front
+
+### Requirement: Moving to the next scramble
+The screen SHALL offer a "Next" action that replaces the current scramble with a new one and hides the case again. Next SHALL also be reachable with the space bar.
+
+#### Scenario: Next scramble
+- **WHEN** the user selects "Next" or presses space
+- **THEN** a new scramble is shown
+- **AND** the case is hidden
+
+### Requirement: Usable on a phone
+The screen SHALL be usable on a phone-sized screen with no horizontal scrolling, so it can sit next to the cube.
+
+#### Scenario: Narrow viewport
+- **WHEN** the screen is viewed 375px wide
+- **THEN** the scramble, buttons and revealed case fit without horizontal scrolling

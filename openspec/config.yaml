@@ -1,0 +1,40 @@
+schema: spec-driven
+
+context: |
+  Personal cubing trainer for one user, grown one narrow trainer at a time.
+  Trainers are organised Puzzle -> Trainer in navigation (e.g. 5x5 -> Last Two Centres).
+  Development is test-driven: every task writes a failing test first.
+  The app is self-hosted on the user's Oracle Cloud (OCI) VM.
+  The user solves 5x5 with the Hoya method (white centre always on D); scrambles are applied holding yellow on U, green on F.
+  Notation follows WCA conventions (Rw = two outer layers, M follows L, y rotates like U).
+
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+# Example:
+#   context: |
+#     Designs and tasks must cover Windows, macOS, and Linux
+#     Write all artifacts in Spanish
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
