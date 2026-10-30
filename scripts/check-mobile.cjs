@@ -12,17 +12,22 @@ const base = process.argv[2] || 'http://localhost:4173';
   page.on('pageerror', (e) => failures.push(`page error: ${e.message}`));
 
   await page.goto(`${base}/#/5x5/l2c`);
+  await page.click('button.show-solution');
   await page.click('text=Show case');
   if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
     failures.push('horizontal scroll at 375px');
   }
+  const clipped = await page.$$eval('.actions button', (bs) =>
+    bs.filter((b) => b.scrollWidth > b.clientWidth).map((b) => b.textContent),
+  );
+  if (clipped.length) failures.push(`button text overflows at 375px: ${clipped.join(', ')}`);
   await page.click('text=Hide case');
   if (!(await page.$eval('.case', (e) => e.hidden))) failures.push('Hide case left the case shown');
   if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
     failures.push('horizontal scroll at 375px after hiding the case');
   }
 
-  for (const button of ['button.next', 'button.show']) {
+  for (const button of ['button.next', 'button.show', 'button.show-solution']) {
     await page.reload();
     await page.evaluate(() => {
       window.changes = 0;
@@ -32,13 +37,14 @@ const base = process.argv[2] || 'http://localhost:4173';
         subtree: true,
       });
     });
+    if (button === 'button.show-solution') await page.click(button);
     await page.focus(button);
     await page.keyboard.press('Space');
     await page.waitForTimeout(100);
     const changes = await page.evaluate(() => window.changes);
-    const hidden = await page.$eval('.case', (e) => e.hidden);
+    const hidden = await page.$eval('.case', (e) => e.hidden) && (await page.$eval('.solution', (e) => e.hidden));
     if (changes !== 1) failures.push(`space on ${button} changed the scramble ${changes} times`);
-    if (!hidden) failures.push(`space on ${button} left the case shown`);
+    if (!hidden) failures.push(`space on ${button} left the case or solution shown`);
   }
 
   await browser.close();

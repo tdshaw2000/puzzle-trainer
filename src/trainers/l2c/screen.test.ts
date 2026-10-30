@@ -3,6 +3,7 @@ import { invert, parseAlg } from '../../cube/notation';
 import { FACE_COLOUR, RING_COLOUR } from '../../cube/colours';
 import { seeded } from '../../lib/random';
 import { mountL2C } from './screen';
+import { L2C_CASES } from './cases';
 
 function mount(seed = 7) {
   const root = document.createElement('div');
@@ -197,6 +198,51 @@ describe('L2C trainer screen', () => {
       cleanup();
       document.body.innerHTML = '';
     }
+  });
+
+  it('hides the solution on arrival', () => {
+    const { root, button } = mount();
+    const solution = root.querySelector<HTMLElement>('.solution')!;
+    expect(solution.hidden).toBe(true);
+    expect(button('Show solution').getAttribute('aria-expanded')).toBe('false');
+    expect(button('Show solution').getAttribute('aria-controls')).toBe(solution.id);
+  });
+
+  it('toggles only the sheet alg, exactly as printed, without showing the case', () => {
+    const { root, button, caseSection } = mount();
+    const solution = root.querySelector<HTMLElement>('.solution')!;
+    button('Show solution').click();
+    expect(solution.hidden).toBe(false);
+    expect(caseSection().hidden).toBe(true);
+    const toggle = button('Hide solution');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(toggle.disabled).toBe(false);
+    button('Show case').click();
+    const n = Number(/Case (\d+)/.exec(caseSection().textContent!)![1]);
+    expect(solution.textContent).toBe(L2C_CASES[n - 1].alg);
+    expect(solution.textContent).toBe(root.querySelector('.reference-alg')!.textContent);
+    expect(solution.querySelector('svg')).toBeNull();
+    button('Hide solution').click();
+    expect(solution.hidden).toBe(true);
+    expect(caseSection().hidden).toBe(false);
+    expect(button('Show solution').getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('hides the solution again on Next and on space', () => {
+    const { root, button, scramble } = mount();
+    const solution = root.querySelector<HTMLElement>('.solution')!;
+    button('Show solution').click();
+    button('Next').click();
+    expect(solution.hidden).toBe(true);
+    expect(button('Show solution').getAttribute('aria-expanded')).toBe('false');
+    button('Show solution').click();
+    button('Show case').click();
+    expect(solution.textContent).toBe(root.querySelector('.reference-alg')!.textContent);
+    const before = scramble();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    expect(scramble()).not.toBe(before);
+    expect(solution.hidden).toBe(true);
+    expect(button('Show solution')).toBeDefined();
   });
 
   it('stops listening for space after cleanup', () => {
