@@ -47,6 +47,32 @@ const base = process.argv[2] || 'http://localhost:4173';
     if (!hidden) failures.push(`space on ${button} left the case or solution shown`);
   }
 
+  // Every skin, with the solution and case shown: nothing scrolls sideways, button labels fit,
+  // and the gear menu doesn't sit on the heading.
+  const skins = await page.evaluate(() => window.PuzzleSkins.SKINS.map(([id]) => id));
+  for (const skin of skins) {
+    await page.evaluate((id) => localStorage.setItem('puzzle-trainer-skin', id), skin);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.click('button.show-solution');
+    await page.click('text=Show case');
+    if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
+      failures.push(`${skin}: horizontal scroll at 375px`);
+    }
+    const tight = await page.$$eval('.actions button', (bs) =>
+      bs.filter((b) => b.scrollWidth > b.clientWidth).map((b) => b.textContent),
+    );
+    if (tight.length) failures.push(`${skin}: button text overflows at 375px: ${tight.join(', ')}`);
+    const overlap = await page.evaluate(() => {
+      const gear = document.querySelector('.skin-picker-toggle').getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(document.querySelector('h1'));
+      return [...range.getClientRects()].some(
+        (r) => r.left < gear.right && r.right > gear.left && r.top < gear.bottom && r.bottom > gear.top,
+      );
+    });
+    if (overlap) failures.push(`${skin}: the skin menu's gear overlaps the heading`);
+  }
+
   await browser.close();
   if (failures.length) {
     console.error(failures.join('\n'));

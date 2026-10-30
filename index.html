@@ -4,9 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Puzzle Trainer</title>
+    <script src="skin.js"></script>
+    <noscript><link rel="stylesheet" href="themes/plain/theme.css" /></noscript>
   </head>
   <body>
-    <main id="app"></main>
+    <div class="page">
+      <details class="skin-picker">
+        <summary class="skin-picker-toggle" aria-label="Change skin">&#9881;</summary>
+        <div class="skin-menu">
+          <p class="skin-menu-title">Skin</p>
+        </div>
+      </details>
+      <main id="app"></main>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

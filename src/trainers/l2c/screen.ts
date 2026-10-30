@@ -122,8 +122,13 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   showSolution.addEventListener('click', () => setSolutionShown(solution.hidden));
   next.addEventListener('click', newScramble);
 
+  // Space inside the skin menu opens it or picks a skin, so it isn't Next there.
   const isSpace = (e: KeyboardEvent) =>
-    (e.key === ' ' || e.code === 'Space') && !e.ctrlKey && !e.metaKey && !e.altKey;
+    (e.key === ' ' || e.code === 'Space') &&
+    !e.ctrlKey &&
+    !e.metaKey &&
+    !e.altKey &&
+    !(e.target instanceof Element && e.target.closest('.skin-picker'));
   const onKeyDown = (e: KeyboardEvent) => {
     if (!isSpace(e)) return;
     e.preventDefault();

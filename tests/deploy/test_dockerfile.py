@@ -53,6 +53,11 @@ def test_the_served_image_holds_only_the_built_site_not_node_or_the_source():
     assert built == [["--from=build", "/app/dist/", "/usr/share/nginx/html/"]]
 
 
+def test_the_build_copies_the_files_vite_serves_as_they_are():
+    # public/ holds the skins and skin.js, which Vite copies into dist/ untouched.
+    assert ["public", "public"] in _copies(_stages()[0])
+
+
 def test_the_image_runs_as_a_non_root_user():
     served = _stages()[-1]
     users = [arguments for keyword, arguments in served if keyword == "USER"]

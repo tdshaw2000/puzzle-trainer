@@ -1,0 +1,14 @@
+/* "Dark" skin: Minimal's layout in greys, light text on near-black. */
+:root {
+  color-scheme: dark;
+  --font: system-ui, sans-serif;
+  --ink: #e6e8eb;
+  --muted: #9aa4b2;
+  --line: #30353c;
+  --accent: #60a5fa;
+  --on-accent: #0d1117;
+  --page: #121417;
+  --card: #1c1f24;
+  --field: #15181c;
+  --radius: 6px;
+}
