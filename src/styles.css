@@ -5,6 +5,7 @@
   --card: #ffffff;
   --border: #dcdcdf;
   --accent: #1f6feb;
+  --on-accent: #ffffff;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -15,6 +16,7 @@
     --card: #222226;
     --border: #3a3a40;
     --accent: #58a6ff;
+    --on-accent: #0d1117;
   }
 }
 * { box-sizing: border-box; }
@@ -41,8 +43,11 @@ h1 { font-size: 1.6rem; }
 }
 .slice-note { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
 .actions { display: flex; gap: 10px; margin: 16px 0; }
+.actions button { flex: 1; }
+.l2c h1 { font-size: 1.3rem; margin: 0 0 4px; }
+.case h2 { font-size: 1.1rem; margin: 0; }
+.case:focus { outline: none; }
 button {
-  flex: 1;
   font: inherit;
   font-weight: 600;
   padding: 12px;
@@ -52,7 +57,7 @@ button {
   color: var(--fg);
   cursor: pointer;
 }
-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 button:disabled { opacity: 0.5; cursor: default; }
 .case {
   display: grid;

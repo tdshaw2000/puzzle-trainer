@@ -50,6 +50,7 @@ export function renderRoute(root: HTMLElement, hash: string) {
   root.replaceChildren();
 
   const route = resolve(hash);
+  document.title = route.kind === 'trainer' ? `${route.puzzle.name} ${route.trainer.name} · Puzzle Trainer` : 'Puzzle Trainer';
   if (route.kind === 'home') return home(root);
   if (route.kind === 'notFound') {
     const p = document.createElement('p');

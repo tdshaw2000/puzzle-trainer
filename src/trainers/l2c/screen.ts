@@ -5,8 +5,6 @@ import type { Random } from '../../lib/random';
 import { renderFaces } from './render';
 import { generateL2CScramble, type L2CScramble } from './scramble';
 
-const SHEET_COLOUR: Partial<Record<Face, string>> = { U: '#e8202a', F: '#1f3fd1' };
-
 const colourName = (f: Face) => FACE_COLOUR[f].name;
 const capitalise = (s: string) => s[0].toUpperCase() + s.slice(1);
 
@@ -20,6 +18,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
 /** Mounts the 5x5 Last Two Centres trainer. Returns a cleanup function. */
 export function mountL2C(container: HTMLElement, random: Random = Math.random): () => void {
   const screen = el('section', 'l2c');
+  const heading = el('h1', undefined, 'Last Two Centres');
   const hold = el('p', 'hold', 'Scramble holding yellow on top, green in front.');
   const scrambleText = el('p', 'scramble');
   const sliceNote = el('p', 'slice-note', 'E turns only the central slice, the same way as D.');
@@ -28,7 +27,9 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   const actions = el('div', 'actions');
   actions.append(show, next);
   const caseSection = el('section', 'case');
-  screen.append(hold, scrambleText, sliceNote, actions, caseSection);
+  caseSection.tabIndex = -1;
+  caseSection.setAttribute('aria-live', 'polite');
+  screen.append(heading, hold, scrambleText, sliceNote, actions, caseSection);
   container.append(screen);
 
   let current: L2CScramble;
@@ -52,17 +53,24 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     );
 
     const sheetCube = applyAlg(solvedCube(), invert(parseAlg(s.caseAlg)));
-    const reference = renderFaces([faceGrid(sheetCube, 'U'), faceGrid(sheetCube, 'F')], 'vertical', (f) => SHEET_COLOUR[f] ?? '#888');
+    const reference = renderFaces(
+      [faceGrid(sheetCube, 'U'), faceGrid(sheetCube, 'F')],
+      'vertical',
+      (f) => (f === 'U' ? FACE_COLOUR[s.top].hex : FACE_COLOUR[s.front].hex),
+    );
     reference.classList.add('reference');
     reference.setAttribute('aria-label', `Sheet picture of case ${s.caseNumber}`);
     const refBlock = el('figure', 'reference-block');
     const caption = el('figcaption');
-    caption.append(el('span', undefined, 'Sheet case (top above front): '), el('code', 'reference-alg', s.caseAlg));
+    caption.append(
+      el('span', undefined, `Sheet picture in this case's colours, ${colourName(s.top)} top above ${colourName(s.front)} front: `),
+      el('code', 'reference-alg', s.caseAlg),
+    );
     refBlock.append(reference, caption);
 
     const scrambled = el('figure', 'scrambled-block');
     scrambled.append(picture, labels);
-    caseSection.append(scrambled, details, refBlock);
+    caseSection.append(el('h2', undefined, 'Case'), scrambled, details, refBlock);
   }
 
   function newScramble() {
@@ -79,10 +87,12 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     renderCase(current);
     caseSection.hidden = false;
     show.disabled = true;
+    caseSection.focus();
   });
   next.addEventListener('click', newScramble);
 
-  const isSpace = (e: KeyboardEvent) => e.key === ' ' || e.code === 'Space';
+  const isSpace = (e: KeyboardEvent) =>
+    (e.key === ' ' || e.code === 'Space') && !e.ctrlKey && !e.metaKey && !e.altKey;
   const onKeyDown = (e: KeyboardEvent) => {
     if (!isSpace(e)) return;
     e.preventDefault();

@@ -18,6 +18,21 @@ describe('trainer navigation', () => {
     expect(link.getAttribute('href')).toBe('#/5x5/l2c');
   });
 
+  it('sets the page title and heading per screen', () => {
+    const root = show('#/5x5/l2c');
+    expect(document.title).toBe('5x5 Last Two Centres · Puzzle Trainer');
+    expect(root.querySelector('h1')!.textContent).toBe('Last Two Centres');
+    show('#/');
+    expect(document.title).toBe('Puzzle Trainer');
+  });
+
+  it('following the home page link opens the trainer', () => {
+    const root = show('');
+    const href = root.querySelector<HTMLAnchorElement>('[data-puzzle="5x5"] a')!.getAttribute('href')!;
+    renderRoute(root, href);
+    expect(root.querySelector('[data-trainer="l2c"] .scramble')).not.toBeNull();
+  });
+
   it('#/ is also the home page', () => {
     expect(show('#/').querySelector('[data-puzzle="5x5"]')).not.toBeNull();
   });

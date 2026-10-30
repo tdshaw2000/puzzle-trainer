@@ -36,13 +36,15 @@ export interface ScrambleChoice {
   random: Random;
 }
 
-/** Random outer turns, no face twice in a row, and the last never on `avoid`. */
-function randomPrefix(random: Random, avoid: Face | null): Move[] {
+/**
+ * Random outer turns, no face twice in a row. Every case alg inverts to something starting
+ * with a wide or slice turn, so the prefix never merges into the case moves.
+ */
+function randomPrefix(random: Random): Move[] {
   const moves: Move[] = [];
   while (moves.length < PREFIX_LENGTH) {
     const prev = moves[moves.length - 1]?.face;
-    const last = moves.length === PREFIX_LENGTH - 1;
-    const faces = OUTER_FACES.filter((f) => f !== prev && !(last && f === avoid));
+    const faces = OUTER_FACES.filter((f) => f !== prev);
     moves.push(move(pick(random, faces), 'outer', 1 + randomInt(random, 3))!);
   }
   return moves;
@@ -52,7 +54,7 @@ export function buildScramble({ caseIndex, top, front, topTurns, frontTurns, ran
   const c = L2C_CASES[caseIndex];
   const caseMoves = rewrite(invert(parseAlg(c.alg)), frameRotation(top, front));
   const orientation = [move(top, 'outer', topTurns), move(front, 'outer', frontTurns)].filter((m) => m !== null);
-  const moves = simplify([...randomPrefix(random, caseMoves[0].face), ...caseMoves, ...orientation]);
+  const moves = simplify([...randomPrefix(random), ...caseMoves, ...orientation]);
 
   const cube = applyAlg(solvedCube(), moves);
   const [left, right] = SIDE_ORDER[(SIDE_ORDER.indexOf(top) + 1) % 4] === front ? [top, front] : [front, top];

@@ -76,6 +76,9 @@ describe('L2C trainer screen', () => {
     button('Next').focus();
     button('Next').dispatchEvent(ev);
     expect(ev.defaultPrevented).toBe(true);
+    const up = new KeyboardEvent('keyup', { key: ' ', cancelable: true, bubbles: true });
+    button('Next').dispatchEvent(up);
+    expect(up.defaultPrevented).toBe(true);
     expect(scramble()).not.toBe(second);
     expect(caseSection().hidden).toBe(true);
   });
@@ -94,6 +97,32 @@ describe('L2C trainer screen', () => {
     }
     expect(withE).toBeGreaterThan(0);
     expect(withoutE).toBeGreaterThan(0);
+  });
+
+  it('ignores space with a modifier key held', () => {
+    const { scramble } = mount();
+    const before = scramble();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', ctrlKey: true }));
+    expect(scramble()).toBe(before);
+  });
+
+  it('moves focus to the revealed case', () => {
+    const { button, caseSection } = mount();
+    button('Show case').click();
+    expect(document.activeElement).toBe(caseSection());
+  });
+
+  it('draws the left face to the left of the right face (shared edge in the middle)', () => {
+    for (let seed = 0; seed < 20; seed++) {
+      const { root, button, cleanup } = mount(seed);
+      button('Show case').click();
+      const { left, right } = root.querySelector<HTMLElement>('.case')!.dataset;
+      // U turns each side face's top row to its left neighbour, so the left face receives the right face's row.
+      const turned = faceGrid(applyAlg(solvedCube(), parseAlg('U')), left as 'F');
+      expect(turned[0].every((x) => x === right)).toBe(true);
+      cleanup();
+      document.body.innerHTML = '';
+    }
   });
 
   it('stops listening for space after cleanup', () => {
