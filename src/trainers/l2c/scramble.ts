@@ -43,7 +43,7 @@ function fewestTurns(cube: Cube, face: Face, turns: number): number {
   return turns;
 }
 
-/** The case setup and the two case faces' orientation turns, nothing else: outer turns never change centres. */
+/** The case setup and the two case faces' orientation turns, nothing else: other outer turns never move centres. */
 export function buildScramble(choice: ScrambleChoice): L2CScramble {
   const { caseIndex, top, front } = choice;
   const c = L2C_CASES[caseIndex];

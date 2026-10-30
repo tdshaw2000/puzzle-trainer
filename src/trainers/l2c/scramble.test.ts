@@ -35,16 +35,19 @@ describe('buildScramble', () => {
               if (m.layer === 'outer') expect([top, front]).toContain(m.face);
             }
 
-            // The applied turn gives the same centres as the requested one, and is never wasted.
+            // The applied turn gives the same centres as the requested one.
             const requested = applyAlg(
               solvedCube(),
               [...caseMoves, move(top, 'outer', topTurns), move(front, 'outer', frontTurns)].filter((m) => m !== null),
             );
             for (const f of [top, front]) expect(centres(cube, f)).toEqual(centres(requested, f));
+            // The applied turn is the fewest that gives these centres, so it is never zero-effect.
+            const setup = applyAlg(solvedCube(), caseMoves);
             for (const [f, n] of [[top, s.topTurns], [front, s.frontTurns]] as const) {
-              if (n === 0) continue;
-              const without = applyAlg(applyAlg(solvedCube(), caseMoves), turns.filter((m) => m.face !== f));
-              expect(centres(without, f)).not.toEqual(centres(cube, f));
+              for (let fewer = 0; fewer < n; fewer++) {
+                const alt = applyAlg(setup, [move(f, 'outer', fewer)].filter((m) => m !== null));
+                expect(centres(alt, f)).not.toEqual(centres(cube, f));
+              }
             }
           }
         }
