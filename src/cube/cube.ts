@@ -11,7 +11,7 @@ interface Slot {
 
 const key = (pos: Vec, normal: Vec) => `${pos.join(',')}|${normal.join(',')}`;
 
-const SLOTS: Slot[] = [];
+export const SLOTS: Slot[] = [];
 const INDEX = new Map<string, number>();
 for (const f of FACES) {
   for (let row = 0; row < 5; row++) {
@@ -75,6 +75,12 @@ export function centres(cube: Cube, f: Face): Face[][] {
   return faceGrid(cube, f)
     .slice(1, 4)
     .map((r) => r.slice(1, 4));
+}
+
+export function stickerAt(cube: Cube, pos: Vec, normal: Vec): Face {
+  const i = INDEX.get(key(pos, normal));
+  if (i === undefined) throw new Error(`No sticker at ${pos} facing ${normal}`);
+  return cube[i];
 }
 
 export function isSolved(cube: Cube): boolean {
