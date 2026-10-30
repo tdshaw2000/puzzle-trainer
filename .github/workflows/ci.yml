@@ -48,7 +48,8 @@ jobs:
       - run: docker compose -f deploy/compose.yaml config --quiet
       - name: Start the image and wait for its health check
         run: |
-          docker run -d --name smoke puzzle-trainer:ci
+          # Read-only with a tmpfs /tmp, as deploy/compose.yaml runs it on the VM.
+          docker run -d --name smoke --read-only --tmpfs /tmp puzzle-trainer:ci
           for attempt in $(seq 1 30); do
             status=$(docker inspect --format '{{.State.Health.Status}}' smoke)
             echo "health: $status"

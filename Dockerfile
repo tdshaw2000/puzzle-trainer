@@ -11,9 +11,12 @@ COPY index.html tsconfig.json vite.config.ts ./
 COPY src src
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.28-alpine
 
-LABEL org.opencontainers.image.source=https://github.com/tdshaw2000/puzzle-trainer
+# The base image's own labels would otherwise describe nginx on the GHCR package page.
+LABEL org.opencontainers.image.source=https://github.com/tdshaw2000/puzzle-trainer \
+      org.opencontainers.image.title=puzzle-trainer \
+      org.opencontainers.image.description="Trainer for specific parts of solving WCA puzzles"
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/ /usr/share/nginx/html/

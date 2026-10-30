@@ -88,3 +88,9 @@ def test_the_build_context_leaves_out_dependencies_builds_and_tests():
     patterns = (ROOT / ".dockerignore").read_text().split()
     for pattern in (".git", "node_modules", "dist", ".venv", "tests"):
         assert pattern in patterns, pattern
+
+
+def test_the_image_describes_this_app_not_its_nginx_base():
+    labels = " ".join(arguments for keyword, arguments in _instructions() if keyword == "LABEL")
+    assert "org.opencontainers.image.description=" in labels
+    assert "nginx" not in labels.split("org.opencontainers.image.description=")[1].lower()
