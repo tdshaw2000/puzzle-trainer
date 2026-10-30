@@ -42,8 +42,8 @@ describe('L2C trainer screen', () => {
     const toggle = root.querySelector<HTMLButtonElement>('button.show')!;
     expect(toggle.textContent).toBe('Show case');
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
-    expect(toggle.getAttribute('aria-controls')).toBe(caseSection().id);
     expect(caseSection().id).not.toBe('');
+    expect(toggle.getAttribute('aria-controls')).toBe(caseSection().id);
 
     toggle.click();
     const shown = caseSection().innerHTML;
