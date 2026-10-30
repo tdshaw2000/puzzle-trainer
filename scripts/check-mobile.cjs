@@ -16,6 +16,11 @@ const base = process.argv[2] || 'http://localhost:4173';
   if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
     failures.push('horizontal scroll at 375px');
   }
+  await page.click('text=Hide case');
+  if (!(await page.$eval('.case', (e) => e.hidden))) failures.push('Hide case left the case shown');
+  if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
+    failures.push('horizontal scroll at 375px after hiding the case');
+  }
 
   for (const button of ['button.next', 'button.show']) {
     await page.reload();
