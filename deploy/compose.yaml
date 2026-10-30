@@ -1,0 +1,32 @@
+# The Puzzle Trainer on the VM it shares with the scramble challenge, WCA Records Analyser and
+# Timer App PR Tracker apps. Installed at /srv/puzzle-trainer/compose.yaml (docs/runbook.md).
+# Its own project name, so nothing here can touch another stack's containers.
+#
+# Settings, from /srv/puzzle-trainer/.env (never committed):
+#   PUZZLE_IMAGE   the image to run, pinned by digest; pull_deploy.py writes it
+#   EDGE_NETWORK  the edge Caddy stack's Docker network, if not scramble-challenge-edge
+name: puzzle-trainer
+
+services:
+  web:
+    image: ${PUZZLE_IMAGE:-ghcr.io/tdshaw2000/puzzle-trainer:main}
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    # No ports: the edge Caddy stack reaches the app over its network by this alias.
+    networks:
+      edge:
+        aliases:
+          - puzzle-trainer
+    mem_limit: 128m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+networks:
+  edge:
+    external: true
+    name: ${EDGE_NETWORK:-scramble-challenge-edge}

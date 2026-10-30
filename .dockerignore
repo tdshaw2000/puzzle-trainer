@@ -1,0 +1,16 @@
+.git
+.gitignore
+.github
+.claude
+.venv
+node_modules
+dist
+tests
+openspec
+scripts
+docs
+**/__pycache__
+.pytest_cache
+.ruff_cache
+README.md
+CLAUDE.md

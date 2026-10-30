@@ -22,3 +22,7 @@ npm run build   # type-check and build static files into dist/
 `dist/` is a static site with relative paths, so it can be served from any folder by any web server.
 
 Changes are planned with [OpenSpec](https://github.com/Fission-AI/OpenSpec) under `openspec/` and built test-first.
+
+## Deployment
+
+Merging to `main` deploys to https://puzzle-trainer.duckdns.org, the same way as the owner's other apps on the shared OCI VM: CI publishes an image to GHCR, then SSHes to the VM with a key restricted to one deploy script. The one-time VM setup and everyday operations are in [`docs/runbook.md`](docs/runbook.md). `uv run pytest` tests the deploy files.
