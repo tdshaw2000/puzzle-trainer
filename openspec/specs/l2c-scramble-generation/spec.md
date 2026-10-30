@@ -39,19 +39,23 @@ The pair of adjacent side faces holding the case SHALL be chosen at random from 
 - **AND** for each pair, each face plays the sheet-top role in some scrambles
 
 ### Requirement: Face orientation is randomised
-Each of the two case faces SHALL be rotated independently by a random 0, 1, 2 or 3 quarter turns relative to the sheet's presentation.
+Each of the two case faces SHALL be rotated independently by a random 0, 1, 2 or 3 quarter turns relative to the sheet's presentation. A turn that leaves that face's centres looking the same SHALL be reduced to the smallest turn giving the same centres, so no orientation turn is wasted. The reported turns SHALL be the turns actually applied.
 
 #### Scenario: Non-ideal orientations occur
 - **WHEN** many scrambles are generated
 - **THEN** each of the 16 combinations of rotations of the two faces occurs
 
-### Requirement: Rest of the cube is scrambled
-A scramble SHALL begin with a random sequence of at least 20 outer-face turns, so edges and corners are mixed up. No constraint is placed on the final state of edges and corners.
-
-#### Scenario: Prefix scrambles the cube
+#### Scenario: No wasted orientation turn
 - **WHEN** a scramble is generated
-- **THEN** it starts with at least 20 outer-face turns, counted after redundant moves are merged
-- **AND** no two consecutive turns in that prefix are on the same face
+- **THEN** leaving out either face's orientation turn would give different centres on that face
+
+### Requirement: Scramble is only the case setup
+A scramble SHALL consist only of the sheet case alg inverted and rewritten for the chosen face pair, followed by the orientation turns of the two case faces, with redundant moves merged. It SHALL contain no other moves: no outer turns of U, D, or the two side faces not holding the case.
+
+#### Scenario: No filler moves
+- **WHEN** a scramble is generated
+- **THEN** it equals the case setup moves followed by at most one outer turn of each case face, after redundant moves are merged
+- **AND** it contains no outer U or D turns and no turns of the two side faces not holding the case
 
 ### Requirement: Scramble notation
 Scrambles SHALL use standard cube notation: outer face turns (R L U D F B), two-layer wide turns (such as Uw, Dw), the single central slice E, and the suffixes ' and 2. On the 5x5, E means only the central (third) layer, turning like D. Adjacent turns of the same layer SHALL be merged, and turns that cancel out SHALL be removed.
