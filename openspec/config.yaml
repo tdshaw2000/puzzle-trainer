@@ -6,7 +6,7 @@ context: |
   Development is test-driven: every task writes a failing test first.
   The app is self-hosted on the user's Oracle Cloud (OCI) VM.
   The user solves 5x5 with the Hoya method (white centre always on D); scrambles are applied holding yellow on U, green on F.
-  Notation follows WCA conventions (Rw = two outer layers, M follows L, y rotates like U).
+  Notation follows WCA conventions (Rw = two outer layers, y rotates like U). On the 5x5, M/E/S mean only the single central slice (M follows L, E follows D, S follows F).
 
 # Project context (optional)
 # Add only constraints that should guide OpenSpec artifacts and workflows.

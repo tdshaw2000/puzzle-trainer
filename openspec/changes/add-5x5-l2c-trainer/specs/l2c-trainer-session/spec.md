@@ -16,14 +16,24 @@ When the Last Two Centres screen opens, it SHALL show a freshly generated scramb
 
 ### Requirement: The target case can be revealed
 The screen SHALL offer a "Show case" action. Using it SHALL reveal the case for the current scramble:
-- a picture of the two case faces as they look after the scramble (centres coloured, the outer ring neutral), drawn with white at the bottom;
-- the face positions and colours;
-- the y rotation (none, y, y' or y2) that brings the left face of the pair to the front;
-- the sheet's reference picture and alg.
+- a picture of the two case faces as they look after the scramble (centres coloured, the outer ring neutral), drawn side by side as seen looking at their shared vertical edge with yellow on top and white at the bottom;
+- the face positions and colours, and which face plays the sheet's top (U) face and which the sheet's front (F) face;
+- the y rotation (none, y, y' or y2) that brings the left face of the pair (the left one in the picture) to the front;
+- the sheet's reference picture (sheet top face above sheet front face, in the sheet's red and blue) and its alg.
+
+The "Show case" action SHALL only reveal; once the case is shown it stays shown until the next scramble.
 
 #### Scenario: Revealing the case
 - **WHEN** the user selects "Show case"
 - **THEN** the case picture, face labels, rotation hint and reference alg for the current scramble are shown
+
+#### Scenario: Rotation hint
+- **WHEN** the case is on the pair green/orange, orange/blue, blue/red or red/green (left face first)
+- **THEN** the rotation hint is none, y, y2 or y' respectively
+
+#### Scenario: Sheet roles are shown
+- **WHEN** the case is revealed
+- **THEN** the screen says which face colour plays the sheet's top face and which plays the sheet's front face
 
 #### Scenario: Picture matches the scramble
 - **WHEN** the case is revealed
@@ -36,6 +46,15 @@ The screen SHALL offer a "Next" action that replaces the current scramble with a
 - **WHEN** the user selects "Next" or presses space
 - **THEN** a new scramble is shown
 - **AND** the case is hidden
+- **AND** a single press of space produces exactly one new scramble, even when the Next button has focus
+
+### Requirement: Slice notation is explained
+When a scramble contains an E move, the screen SHALL show a note that on the 5x5 E means only the central slice, turning like D.
+
+#### Scenario: Scramble with a slice
+- **WHEN** the displayed scramble contains E, E' or E2
+- **THEN** the slice note is visible
+- **AND** it is not shown for scrambles without E
 
 ### Requirement: Usable on a phone
 The screen SHALL be usable on a phone-sized screen with no horizontal scrolling, so it can sit next to the cube.

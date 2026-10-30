@@ -31,7 +31,7 @@ The cube is a map of 150 stickers addressed by face and (row, col). Moves are de
 The 19 cases are stored as their reference alg strings exactly as printed on the sheet. The case pattern is derived, not transcribed: applying the inverse alg to a solved cube gives the case. Tests assert that each derived pattern keeps the sheet's 2x3 block on F (left two centre columns) and that all 19 patterns are distinct, which catches transcription errors.
 
 ### Scramble construction
-1. Prefix: at least 20 random outer-face turns (no consecutive turns on the same face). Outer turns never move centres between faces, so all centres stay solved.
+1. Prefix: 20 random outer-face turns (no consecutive turns on the same face, and the last one never on the face of the first case move), so merging can never shorten it. Outer turns never move centres between faces, so all centres stay solved.
 2. Choose an ordered adjacent side-face pair (X, Y) uniformly from the 8 options: X plays the sheet's U, Y the sheet's F. This fixes a whole-cube rotation from sheet frame to scramble frame (sheet R maps onto the U/D axis).
 3. Append the inverse of the case alg, with each move rewritten through that rotation (e.g. sheet Rw becomes Uw or Dw, sheet U becomes the X face, M becomes E or E').
 4. Append a random 0-3 quarter turns of X, then of Y (outer turns, so only those faces' patterns rotate).

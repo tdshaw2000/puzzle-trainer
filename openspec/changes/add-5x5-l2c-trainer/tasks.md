@@ -1,8 +1,10 @@
 # Tasks
 
+Every task is test-first: write the failing tests named in the task, then implement until they pass.
+
 ## 1. Project setup
 
-- [ ] 1.1 Scaffold Vite + TypeScript + Vitest (jsdom) app with `npm test`, `npm run build` and `npm run dev`; verify a placeholder test passes and the build produces `dist/`
+- [ ] 1.1 Scaffold Vite + TypeScript + Vitest (jsdom) app with `npm test`, `npm run build` and `npm run dev`; use a relative base (`base: './'`) so `dist/` works from any path; verify a test runs and the build produces `dist/`
 
 ## 2. 5x5 cube model
 
@@ -21,9 +23,9 @@
 
 ## 5. L2C trainer screen
 
-- [ ] 5.1 Implement the SVG case renderer (two faces, centres coloured, ring grey); verify with tests that rendered sticker colours match a simulated state
-- [ ] 5.2 Implement the trainer screen (scramble with holding reminder, Show case with picture, labels, y-rotation hint, reference picture and alg, Next button and space bar); verify with DOM tests for each l2c-trainer-session scenario
-- [ ] 5.3 Add responsive styles and check the screen at 375px wide has no horizontal scroll (Playwright screenshot check)
+- [ ] 5.1 Implement the SVG face renderer with horizontal and vertical layouts (centres coloured, ring grey); verify with tests that rendered sticker colours match a simulated state
+- [ ] 5.2 Implement the trainer screen (scramble with holding reminder, Show case with picture, labels, y-rotation hint, reference picture and alg, Next button and space bar with preventDefault, E-slice note); verify with DOM tests for each l2c-trainer-session scenario
+- [ ] 5.3 Add responsive styles and check the screen at 375px wide has no horizontal scroll (one-off Playwright script, see design.md)
 
 ## 6. Integration
 

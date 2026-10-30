@@ -28,7 +28,8 @@ Applying a scramble to a solved cube SHALL leave the U (yellow) and D (white) ce
 - **WHEN** a generated scramble is applied to a solved 5x5
 - **THEN** the white centre on D and the yellow centre on U are fully solved
 - **AND** exactly two adjacent side faces have unsolved centres
-- **AND** their centres match the chosen case's pattern under some quarter-turn rotation of each face
+- **AND** the face playing the sheet's top has the sheet's U-face case pattern turned by that face's chosen orientation
+- **AND** the face playing the sheet's front has the sheet's F-face case pattern turned by that face's chosen orientation
 
 ### Requirement: The case moves around the cube
 The pair of adjacent side faces holding the case SHALL be chosen at random from the four adjacent side-face pairs. Which face of the pair plays the role of the sheet's top face SHALL also be random.
@@ -50,11 +51,11 @@ A scramble SHALL begin with a random sequence of at least 20 outer-face turns, s
 
 #### Scenario: Prefix scrambles the cube
 - **WHEN** a scramble is generated
-- **THEN** it starts with at least 20 outer-face turns
-- **AND** no two consecutive turns are on the same face
+- **THEN** it starts with at least 20 outer-face turns, counted after redundant moves are merged
+- **AND** no two consecutive turns in that prefix are on the same face
 
 ### Requirement: Scramble notation
-Scrambles SHALL use standard cube notation: outer face turns (R L U D F B), two-layer wide turns (Rw, Lw, Uw, Dw, Fw, Bw), middle slices (M, E, S) and the suffixes ' and 2. Adjacent turns of the same layer SHALL be merged, and turns that cancel out SHALL be removed.
+Scrambles SHALL use standard cube notation: outer face turns (R L U D F B), two-layer wide turns (such as Uw, Dw), the single central slice E, and the suffixes ' and 2. On the 5x5, E means only the central (third) layer, turning like D. Adjacent turns of the same layer SHALL be merged, and turns that cancel out SHALL be removed.
 
 #### Scenario: No redundant moves
 - **WHEN** a scramble is generated
@@ -62,7 +63,7 @@ Scrambles SHALL use standard cube notation: outer face turns (R L U D F B), two-
 - **AND** it contains no cube rotations
 
 ### Requirement: Case details accompany each scramble
-Each scramble SHALL come with its case: the sheet case it uses, its reference alg, the two faces holding it (by position and centre colour), and the centre colours of those two faces after the scramble.
+Each scramble SHALL come with its case: the sheet case it uses, its reference alg, the two faces holding it (by position and centre colour), which of them plays the sheet's top (U) face and which the sheet's front (F) face, and the centre colours of those two faces after the scramble.
 
 #### Scenario: Case details match the cube
 - **WHEN** a scramble is generated
