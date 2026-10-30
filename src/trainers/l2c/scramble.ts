@@ -1,19 +1,16 @@
-import { applyAlg, faceGrid, solvedCube } from '../../cube/cube';
-import { OPPOSITE, formatAlg, invert, move, parseAlg, simplify, type Face, type Move } from '../../cube/notation';
+import { applyAlg, centres, faceGrid, solvedCube, type Cube } from '../../cube/cube';
+import { formatAlg, invert, move, parseAlg, simplify, type Face } from '../../cube/notation';
 import { frameRotation, rewrite, SIDE_ORDER, SIDE_PAIRS } from '../../cube/rotation';
 import { pick, randomInt, type Random } from '../../lib/random';
 import { L2C_CASES } from './cases';
 
-export const PREFIX_LENGTH = 20;
-
-const OUTER_FACES: readonly Face[] = ['U', 'D', 'F', 'B', 'R', 'L'];
 const Y_HINT: Record<string, string> = { F: '', R: 'y', B: 'y2', L: "y'" };
 
 export interface L2CScramble {
   text: string;
   caseNumber: number;
   caseAlg: string;
-  /** Faces playing the sheet's U and F, and their extra clockwise quarter turns. */
+  /** Faces playing the sheet's U and F, and the extra clockwise quarter turns actually applied. */
   top: Face;
   front: Face;
   topTurns: number;
@@ -33,31 +30,30 @@ export interface ScrambleChoice {
   front: Face;
   topTurns: number;
   frontTurns: number;
-  random: Random;
 }
 
-/**
- * Random outer turns, no face twice in a row. Every case alg inverts to something starting
- * with a wide or slice turn, so the prefix never merges into the case moves.
- */
-function randomPrefix(random: Random): Move[] {
-  const moves: Move[] = [];
-  while (moves.length < PREFIX_LENGTH) {
-    const prev = moves[moves.length - 1]?.face;
-    const prev2 = moves[moves.length - 2]?.face;
-    // Avoid runs like R L R' that waste moves on one axis.
-    const axisRun = prev2 !== undefined && prev === OPPOSITE[prev2];
-    const faces = OUTER_FACES.filter((f) => f !== prev && !(axisRun && f === prev2));
-    moves.push(move(pick(random, faces), 'outer', 1 + randomInt(random, 3))!);
-  }
-  return moves;
+/** `face`'s centres after turning it `turns` quarter turns clockwise. */
+const centresAfter = (cube: Cube, face: Face, turns: number) =>
+  centres(applyAlg(cube, [move(face, 'outer', turns)].filter((m) => m !== null)), face).flat().join('');
+
+/** The fewest quarter turns of `face` that leave its centres as `turns` would (e.g. 2 -> 0 on a half-turn-symmetric face). */
+function fewestTurns(cube: Cube, face: Face, turns: number): number {
+  const target = centresAfter(cube, face, turns);
+  for (let n = 0; n < turns; n++) if (centresAfter(cube, face, n) === target) return n;
+  return turns;
 }
 
-export function buildScramble({ caseIndex, top, front, topTurns, frontTurns, random }: ScrambleChoice): L2CScramble {
+/** The case setup and the two case faces' orientation turns, nothing else: outer turns never change centres. */
+export function buildScramble(choice: ScrambleChoice): L2CScramble {
+  const { caseIndex, top, front } = choice;
   const c = L2C_CASES[caseIndex];
   const caseMoves = rewrite(invert(parseAlg(c.alg)), frameRotation(top, front));
+  const setup = applyAlg(solvedCube(), caseMoves);
+  // Turning one case face never changes the other's centres, so each reduces on its own.
+  const topTurns = fewestTurns(setup, top, choice.topTurns);
+  const frontTurns = fewestTurns(setup, front, choice.frontTurns);
   const orientation = [move(top, 'outer', topTurns), move(front, 'outer', frontTurns)].filter((m) => m !== null);
-  const moves = simplify([...randomPrefix(random), ...caseMoves, ...orientation]);
+  const moves = simplify([...caseMoves, ...orientation]);
 
   const cube = applyAlg(solvedCube(), moves);
   const [left, right] = SIDE_ORDER[(SIDE_ORDER.indexOf(top) + 1) % 4] === front ? [top, front] : [front, top];
@@ -84,6 +80,5 @@ export function generateL2CScramble(random: Random = Math.random): L2CScramble {
     front,
     topTurns: randomInt(random, 4),
     frontTurns: randomInt(random, 4),
-    random,
   });
 }
