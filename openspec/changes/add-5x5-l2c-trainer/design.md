@@ -31,7 +31,7 @@ The cube is a map of 150 stickers addressed by face and (row, col). Moves are de
 The 19 cases are stored as their reference alg strings exactly as printed on the sheet. The case pattern is derived, not transcribed: applying the inverse alg to a solved cube gives the case. Tests assert that each derived pattern keeps the sheet's 2x3 block on F (left two centre columns) and that all 19 patterns are distinct, which catches transcription errors.
 
 ### Scramble construction
-1. Prefix: 20 random outer-face turns (no consecutive turns on the same face, and the last one never on the face of the first case move), so merging can never shorten it. Outer turns never move centres between faces, so all centres stay solved.
+1. Prefix: 20 random outer-face turns (no consecutive turns on the same face). Every case alg inverts to a sequence starting with a wide or slice turn, so merging can never shorten the prefix. Outer turns never move centres between faces, so all centres stay solved.
 2. Choose an ordered adjacent side-face pair (X, Y) uniformly from the 8 options: X plays the sheet's U, Y the sheet's F. This fixes a whole-cube rotation from sheet frame to scramble frame (sheet R maps onto the U/D axis).
 3. Append the inverse of the case alg, with each move rewritten through that rotation (e.g. sheet Rw becomes Uw or Dw, sheet U becomes the X face, M becomes E or E').
 4. Append a random 0-3 quarter turns of X, then of Y (outer turns, so only those faces' patterns rotate).
@@ -43,7 +43,13 @@ The result is tested by simulation: for every case, every face pair and every or
 Generator functions take a random source (default `Math.random`). Tests pass a seeded generator for determinism, and statistical tests ("every case appears") run a few thousand seeded scrambles.
 
 ### Case picture rendered as inline SVG
-The revealed case is drawn by the app from the simulated state, not taken from VisualCube images: the colours and orientation differ every scramble, so the picture must come from the actual state. The two faces are drawn side by side as seen when looking at their shared edge with yellow on top (left face, right face), centres coloured, outer ring grey. The reference picture is the same renderer applied to the sheet frame (U above F, red/blue), so no external images are needed.
+The revealed case is drawn by the app from the simulated state, not taken from VisualCube images: the colours and orientation differ every scramble, so the picture must come from the actual state. One renderer draws a list of 5x5 face grids with a layout parameter: `horizontal` for the scrambled case (the two faces side by side as seen looking at their shared edge with yellow on top, left face then its clockwise neighbour seen from above), `vertical` for the reference (sheet U above sheet F). Centres are coloured, the outer ring grey. The reference colours the sheet frame's U-origin and F-origin stickers with the colours of the faces playing those roles in this scramble, so the card never uses one colour for two meanings. No external images are needed.
+
+### Holding hints
+"Left face" of the pair is the one whose clockwise neighbour (seen from above) is the other face: F→R→B→L→F. The y hint brings it to the front: F none, R y, B y2, L y'. The reveal also names which colour plays the sheet's U and F.
+
+### Layout check
+The 375px no-horizontal-scroll check uses the Playwright and Chromium already available in the dev environment, run by `scripts/check-mobile.cjs` against `vite preview`; Playwright is not added as a project dependency. The script also checks that one space press changes the scramble exactly once whichever button has focus.
 
 ## Risks / Trade-offs
 

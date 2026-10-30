@@ -25,7 +25,7 @@ Every task is test-first: write the failing tests named in the task, then implem
 
 - [x] 5.1 Implement the SVG face renderer with horizontal and vertical layouts (centres coloured, ring grey); verify with tests that rendered sticker colours match a simulated state
 - [x] 5.2 Implement the trainer screen (scramble with holding reminder, Show case with picture, labels, y-rotation hint, reference picture and alg, Next button and space bar with preventDefault, E-slice note); verify with DOM tests for each l2c-trainer-session scenario
-- [x] 5.3 Add responsive styles and check the screen at 375px wide has no horizontal scroll (one-off Playwright script, see design.md)
+- [x] 5.3 Add responsive styles and check the screen at 375px wide has no horizontal scroll (`scripts/check-mobile.cjs`, see design.md)
 
 ## 6. Integration
 

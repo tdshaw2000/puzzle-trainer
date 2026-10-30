@@ -19,7 +19,7 @@ The screen SHALL offer a "Show case" action. Using it SHALL reveal the case for 
 - a picture of the two case faces as they look after the scramble (centres coloured, the outer ring neutral), drawn side by side as seen looking at their shared vertical edge with yellow on top and white at the bottom;
 - the face positions and colours, and which face plays the sheet's top (U) face and which the sheet's front (F) face;
 - the y rotation (none, y, y' or y2) that brings the left face of the pair (the left one in the picture) to the front;
-- the sheet's reference picture (sheet top face above sheet front face, in the sheet's red and blue) and its alg.
+- the sheet's reference picture (sheet top face above sheet front face, in the colours of the faces playing those roles) and its alg.
 
 The "Show case" action SHALL only reveal; once the case is shown it stays shown until the next scramble.
 
