@@ -33,7 +33,9 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   solution.id = 'l2c-solution';
   showSolution.setAttribute('aria-controls', solution.id);
   const caseSection = el('section', 'case');
+  caseSection.id = 'l2c-case';
   caseSection.tabIndex = -1;
+  show.setAttribute('aria-controls', caseSection.id);
   screen.append(heading, hold, scrambleText, sliceNote, actions, solution, caseSection);
   container.append(screen);
 
@@ -90,24 +92,32 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     showSolution.setAttribute('aria-expanded', String(shown));
   }
 
+  function setShown(shown: boolean) {
+    caseSection.hidden = !shown;
+    show.textContent = shown ? 'Hide case' : 'Show case';
+    show.setAttribute('aria-expanded', String(shown));
+  }
+
   function newScramble() {
     const focusWasInCase = caseSection.contains(document.activeElement);
     current = generateL2CScramble(random);
     scrambleText.textContent = current.text;
     sliceNote.hidden = !/\bE/.test(current.text);
-    caseSection.hidden = true;
+    setShown(false);
     caseSection.replaceChildren();
-    show.disabled = false;
     setSolutionShown(false);
     if (focusWasInCase) show.focus();
   }
 
   show.addEventListener('click', () => {
-    if (!caseSection.hidden) return;
-    renderCase(current);
-    caseSection.hidden = false;
-    show.disabled = true;
-    caseSection.focus();
+    if (caseSection.hidden) {
+      renderCase(current);
+      setShown(true);
+      caseSection.focus();
+    } else {
+      setShown(false);
+      show.focus();
+    }
   });
   showSolution.addEventListener('click', () => setSolutionShown(solution.hidden));
   next.addEventListener('click', newScramble);

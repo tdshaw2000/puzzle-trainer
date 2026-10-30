@@ -9,4 +9,4 @@ Every task is test-first: write the failing tests named in the task, then implem
 
 ## 2. Wrap up
 
-- [ ] 2.1 Reviewer subagent reviews the code; address findings; merge (deploys) and archive this change into `openspec/specs/l2c-trainer-session`
+- [x] 2.1 Reviewer subagent reviews the code; address findings; merge (deploys) and archive this change into `openspec/specs/l2c-trainer-session`

@@ -21,6 +21,11 @@ const base = process.argv[2] || 'http://localhost:4173';
     bs.filter((b) => b.scrollWidth > b.clientWidth).map((b) => b.textContent),
   );
   if (clipped.length) failures.push(`button text overflows at 375px: ${clipped.join(', ')}`);
+  await page.click('text=Hide case');
+  if (!(await page.$eval('.case', (e) => e.hidden))) failures.push('Hide case left the case shown');
+  if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
+    failures.push('horizontal scroll at 375px after hiding the case');
+  }
 
   for (const button of ['button.next', 'button.show', 'button.show-solution']) {
     await page.reload();

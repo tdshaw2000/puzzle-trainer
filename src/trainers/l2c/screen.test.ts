@@ -36,8 +36,38 @@ describe('L2C trainer screen', () => {
     expect(text).toMatch(/Sheet front \(F\): \w+/);
     expect(text).toMatch(/Rotation: (no rotation|y|y'|y2)/);
     expect(root.querySelector('.case .reference-alg')!.textContent).toMatch(/Rw/);
-    button('Show case').click();
+  });
+
+  it('toggles the case: Hide case hides it, and showing again gives the same case', () => {
+    const { root, button, caseSection } = mount();
+    const toggle = root.querySelector<HTMLButtonElement>('button.show')!;
+    expect(toggle.textContent).toBe('Show case');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(caseSection().id).not.toBe('');
+    expect(toggle.getAttribute('aria-controls')).toBe(caseSection().id);
+
+    toggle.click();
+    const shown = caseSection().innerHTML;
     expect(caseSection().hidden).toBe(false);
+    expect(toggle.textContent).toBe('Hide case');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(toggle.disabled).toBe(false);
+
+    toggle.click();
+    expect(caseSection().hidden).toBe(true);
+    expect(toggle.textContent).toBe('Show case');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.disabled).toBe(false);
+    expect(document.activeElement).toBe(toggle);
+
+    toggle.click();
+    expect(caseSection().hidden).toBe(false);
+    expect(caseSection().innerHTML).toBe(shown);
+
+    button('Next').click();
+    expect(caseSection().hidden).toBe(true);
+    expect(toggle.textContent).toBe('Show case');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('draws the case faces exactly as the scramble leaves them', () => {
