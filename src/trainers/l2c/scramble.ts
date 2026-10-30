@@ -1,5 +1,5 @@
 import { applyAlg, faceGrid, solvedCube } from '../../cube/cube';
-import { formatAlg, invert, move, parseAlg, simplify, type Face, type Move } from '../../cube/notation';
+import { OPPOSITE, formatAlg, invert, move, parseAlg, simplify, type Face, type Move } from '../../cube/notation';
 import { frameRotation, rewrite, SIDE_ORDER, SIDE_PAIRS } from '../../cube/rotation';
 import { pick, randomInt, type Random } from '../../lib/random';
 import { L2C_CASES } from './cases';
@@ -44,7 +44,10 @@ function randomPrefix(random: Random): Move[] {
   const moves: Move[] = [];
   while (moves.length < PREFIX_LENGTH) {
     const prev = moves[moves.length - 1]?.face;
-    const faces = OUTER_FACES.filter((f) => f !== prev);
+    const prev2 = moves[moves.length - 2]?.face;
+    // Avoid runs like R L R' that waste moves on one axis.
+    const axisRun = prev2 !== undefined && prev === OPPOSITE[prev2];
+    const faces = OUTER_FACES.filter((f) => f !== prev && !(axisRun && f === prev2));
     moves.push(move(pick(random, faces), 'outer', 1 + randomInt(random, 3))!);
   }
   return moves;

@@ -3,6 +3,7 @@ import { FACE_COLOUR } from '../../cube/colours';
 import { invert, parseAlg, type Face } from '../../cube/notation';
 import type { Random } from '../../lib/random';
 import { renderFaces } from './render';
+import { lookalikeCases } from './cases';
 import { generateL2CScramble, type L2CScramble } from './scramble';
 
 const colourName = (f: Face) => FACE_COLOUR[f].name;
@@ -21,6 +22,7 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   const heading = el('h1', undefined, 'Last Two Centres');
   const hold = el('p', 'hold', 'Scramble holding yellow on top, green in front.');
   const scrambleText = el('p', 'scramble');
+  scrambleText.setAttribute('aria-live', 'polite');
   const sliceNote = el('p', 'slice-note', 'E turns only the central slice, the same way as D.');
   const show = el('button', 'show', 'Show case');
   const next = el('button', 'next primary', 'Next');
@@ -28,7 +30,6 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   actions.append(show, next);
   const caseSection = el('section', 'case');
   caseSection.tabIndex = -1;
-  caseSection.setAttribute('aria-live', 'polite');
   screen.append(heading, hold, scrambleText, sliceNote, actions, caseSection);
   container.append(screen);
 
@@ -51,6 +52,11 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
       el('li', undefined, `Sheet front (F): ${colourName(s.front)}`),
       el('li', undefined, `Rotation: ${s.yHint || 'no rotation'} (${colourName(s.left)} to the front)`),
     );
+    for (const other of lookalikeCases(s.caseNumber)) {
+      details.append(
+        el('li', 'lookalike', `Looks the same as case ${other.number} after turning the faces: ${other.alg}`),
+      );
+    }
 
     const sheetCube = applyAlg(solvedCube(), invert(parseAlg(s.caseAlg)));
     const reference = renderFaces(
@@ -74,12 +80,14 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   }
 
   function newScramble() {
+    const focusWasInCase = caseSection.contains(document.activeElement);
     current = generateL2CScramble(random);
     scrambleText.textContent = current.text;
     sliceNote.hidden = !/\bE/.test(current.text);
     caseSection.hidden = true;
     caseSection.replaceChildren();
     show.disabled = false;
+    if (focusWasInCase) show.focus();
   }
 
   show.addEventListener('click', () => {

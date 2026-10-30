@@ -1,5 +1,5 @@
 import { applyAlg, faceGrid, solvedCube } from '../../cube/cube';
-import { parseAlg } from '../../cube/notation';
+import { invert, parseAlg } from '../../cube/notation';
 import { FACE_COLOUR, RING_COLOUR } from '../../cube/colours';
 import { seeded } from '../../lib/random';
 import { mountL2C } from './screen';
@@ -106,10 +106,54 @@ describe('L2C trainer screen', () => {
     expect(scramble()).toBe(before);
   });
 
-  it('moves focus to the revealed case', () => {
+  it('moves focus to the revealed case, and back to Show case on the next scramble', () => {
     const { button, caseSection } = mount();
     button('Show case').click();
     expect(document.activeElement).toBe(caseSection());
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    expect(document.activeElement).toBe(button('Show case'));
+  });
+
+  it('draws the sheet reference in the colours of the faces playing top and front', () => {
+    const { root, button } = mount(3);
+    button('Show case').click();
+    const text = root.querySelector('.case')!.textContent!;
+    const top = /Sheet top \(U\): ([a-z]+)/.exec(text)![1];
+    const front = /Sheet front \(F\): ([a-z]+)/.exec(text)![1];
+    const alg = root.querySelector('.reference-alg')!.textContent!;
+    const sheet = applyAlg(solvedCube(), invert(parseAlg(alg)));
+    const hex = (name: string) => Object.values(FACE_COLOUR).find((c) => c.name === name)!.hex;
+    const svg = root.querySelector('.case svg.reference')!;
+    (['U', 'F'] as const).forEach((f, i) => {
+      const grid = faceGrid(sheet, f);
+      for (let row = 1; row < 4; row++) {
+        for (let col = 1; col < 4; col++) {
+          const fill = svg.querySelector(`rect[data-face="${i}"][data-row="${row}"][data-col="${col}"]`)!.getAttribute('fill');
+          expect(fill).toBe(hex(grid[row][col] === 'U' ? top : front));
+        }
+      }
+    });
+  });
+
+  it('mentions lookalike sheet cases only when there are some', () => {
+    let seen = 0;
+    for (let seed = 0; seed < 300 && seen < 2; seed++) {
+      const { root, button, cleanup } = mount(seed);
+      button('Show case').click();
+      const n = Number(/Case (\d+)/.exec(root.querySelector('.case')!.textContent!)![1]);
+      const notes = root.querySelectorAll('.case .lookalike');
+      const partner: Record<number, number> = { 1: 2, 2: 1, 4: 6, 6: 4 };
+      if (partner[n]) {
+        seen++;
+        expect(notes).toHaveLength(1);
+        expect(notes[0].textContent).toContain(`case ${partner[n]}`);
+      } else {
+        expect(notes).toHaveLength(0);
+      }
+      cleanup();
+      document.body.innerHTML = '';
+    }
+    expect(seen).toBe(2);
   });
 
   it('draws the left face to the left of the right face (shared edge in the middle)', () => {

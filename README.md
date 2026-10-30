@@ -17,6 +17,8 @@ npm run dev     # local dev server
 npm run build   # type-check and build static files into dist/
 ```
 
+`npm run check:mobile` checks the trainer at phone width and the space bar in a real browser. It needs Playwright with Chromium installed (not a project dependency) and `npx vite preview` running.
+
 `dist/` is a static site with relative paths, so it can be served from any folder by any web server.
 
 Changes are planned with [OpenSpec](https://github.com/Fission-AI/OpenSpec) under `openspec/` and built test-first.

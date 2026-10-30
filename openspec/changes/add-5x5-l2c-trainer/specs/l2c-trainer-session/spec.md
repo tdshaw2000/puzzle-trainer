@@ -39,6 +39,13 @@ The "Show case" action SHALL only reveal; once the case is shown it stays shown 
 - **WHEN** the case is revealed
 - **THEN** every centre sticker in the picture has the colour that face position has after applying the scramble to a solved cube held yellow-top, green-front
 
+### Requirement: Lookalike cases are named
+Some sheet cases are the same physical state once each face may be turned and either face may play the sheet's top (cases 1 and 2, cases 4 and 6). When the revealed case has such a lookalike, the reveal SHALL name the lookalike case and its alg.
+
+#### Scenario: Revealing a case with a lookalike
+- **WHEN** the case for a scramble of case 1 is revealed
+- **THEN** the reveal says it looks the same as case 2 and shows case 2's alg
+
 ### Requirement: Moving to the next scramble
 The screen SHALL offer a "Next" action that replaces the current scramble with a new one and hides the case again. Next SHALL also be reachable with the space bar.
 

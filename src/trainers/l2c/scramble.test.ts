@@ -1,5 +1,6 @@
 import { applyAlg, centres, faceGrid, solvedCube } from '../../cube/cube';
-import { move, parseAlg, type Face } from '../../cube/notation';
+import { NORMAL, rotateClockwise, sameVec } from '../../cube/geometry';
+import { OPPOSITE, move, parseAlg, type Face } from '../../cube/notation';
 import { frameRotation, rewrite, SIDE_PAIRS } from '../../cube/rotation';
 import { seeded } from '../../lib/random';
 import { L2C_CASES } from './cases';
@@ -54,6 +55,10 @@ describe('generateL2CScramble', () => {
       expect(PREFIX_LENGTH).toBeGreaterThanOrEqual(20);
       expect(moves.every((m) => m.layer === 'outer')).toBe(true);
       for (let i = 1; i < moves.length; i++) expect(moves[i].face).not.toBe(moves[i - 1].face);
+      for (let i = 2; i < moves.length; i++) {
+        const sameAxisRun = moves[i - 1].face === OPPOSITE[moves[i - 2].face] && moves[i].face === moves[i - 2].face;
+        expect(sameAxisRun).toBe(false);
+      }
     }
   });
 
@@ -68,12 +73,18 @@ describe('generateL2CScramble', () => {
   });
 
   it('reports the left/right faces and y hint', () => {
-    const hints: Record<string, string> = { F: '', R: 'y', B: 'y2', L: "y'" };
+    // y turns the cube like U: count the quarter turns that bring the left face to the front.
+    const hintFor = (face: Face) => {
+      let v = NORMAL[face];
+      for (let n = 0; n < 4; n++, v = rotateClockwise(v, NORMAL.U)) {
+        if (sameVec(v, NORMAL.F)) return ['', 'y', 'y2', "y'"][n];
+      }
+    };
     const right: Record<string, string> = { F: 'R', R: 'B', B: 'L', L: 'F' };
     for (const s of scrambles.slice(0, 100)) {
       expect(right[s.left]).toBe(s.right);
       expect([s.left, s.right].sort()).toEqual([s.top, s.front].sort());
-      expect(s.yHint).toBe(hints[s.left]);
+      expect(s.yHint).toBe(hintFor(s.left));
       expect(s.caseAlg).toBe(L2C_CASES[s.caseNumber - 1].alg);
     }
   });
