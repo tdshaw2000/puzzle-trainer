@@ -6,6 +6,8 @@ Current trainers:
 
 - **5x5 › Last Two Centres** (`#/5x5/l2c`): scrambles that land on one of the 19 cases from the CubeSkills 5x5 L2C sheet, on a random pair of adjacent side faces in a random orientation. A scramble is only the case setup plus at most one turn of each case face, with no filler moves. Hold yellow on top and green in front while scrambling (white stays on the bottom). After solving, "Show case" reveals the case as it was scrambled, alongside the sheet's picture and alg; select "Hide case" to hide it again.
 
+The ⚙ menu in the top-right corner changes the skin: Minimal (the default), Dark, DOS, Mario, Monkey or VHS, the same set as the owner's other apps. The choice is remembered in the browser. Skins live in `public/themes/<skin>/theme.css` and are picked by `public/skin.js`; `src/styles.css` holds only layout.
+
 ## Development
 
 Requires Node 20+.
@@ -17,7 +19,7 @@ npm run dev     # local dev server
 npm run build   # type-check and build static files into dist/
 ```
 
-`npm run check:mobile` checks the trainer at phone width and the space bar in a real browser. It needs Playwright with Chromium installed (not a project dependency) and `npx vite preview` running.
+`npm run check:mobile` checks the trainer at phone width under every skin, and the space bar, in a real browser. It needs Playwright with Chromium installed (not a project dependency) and `npx vite preview` running.
 
 `dist/` is a static site with relative paths, so it can be served from any folder by any web server.
 

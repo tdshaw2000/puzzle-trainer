@@ -5,5 +5,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    // Lets tests read stylesheets with ?raw (the skin tests check them); otherwise they load empty.
+    css: true,
   },
 });
