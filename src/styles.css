@@ -75,3 +75,13 @@ button:disabled { opacity: 0.5; cursor: default; }
 .details { margin: 0; padding-left: 1.2rem; }
 .reference-block figcaption { color: var(--muted); font-size: 0.9rem; }
 .reference-alg { color: var(--fg); }
+.solution {
+  font: 600 clamp(1.05rem, 4.2vw, 1.4rem)/1.6 ui-monospace, 'SF Mono', Menlo, monospace;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+.solution[hidden] { display: none; }

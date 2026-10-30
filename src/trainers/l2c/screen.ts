@@ -25,12 +25,17 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   scrambleText.setAttribute('aria-live', 'polite');
   const sliceNote = el('p', 'slice-note', 'E turns only the central slice, the same way as D.');
   const show = el('button', 'show', 'Show case');
+  const showSolution = el('button', 'show-solution', 'Show solution');
   const next = el('button', 'next primary', 'Next');
   const actions = el('div', 'actions');
-  actions.append(show, next);
+  actions.append(show, showSolution, next);
+  const solution = el('p', 'solution');
+  solution.id = 'l2c-solution';
+  solution.setAttribute('aria-live', 'polite');
+  showSolution.setAttribute('aria-controls', solution.id);
   const caseSection = el('section', 'case');
   caseSection.tabIndex = -1;
-  screen.append(heading, hold, scrambleText, sliceNote, actions, caseSection);
+  screen.append(heading, hold, scrambleText, sliceNote, actions, solution, caseSection);
   container.append(screen);
 
   let current: L2CScramble;
@@ -79,6 +84,13 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     caseSection.append(el('h2', undefined, 'Case'), scrambled, details, refBlock);
   }
 
+  function setSolutionShown(shown: boolean) {
+    solution.textContent = shown ? current.caseAlg : '';
+    solution.hidden = !shown;
+    showSolution.textContent = shown ? 'Hide solution' : 'Show solution';
+    showSolution.setAttribute('aria-expanded', String(shown));
+  }
+
   function newScramble() {
     const focusWasInCase = caseSection.contains(document.activeElement);
     current = generateL2CScramble(random);
@@ -87,6 +99,7 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     caseSection.hidden = true;
     caseSection.replaceChildren();
     show.disabled = false;
+    setSolutionShown(false);
     if (focusWasInCase) show.focus();
   }
 
@@ -97,6 +110,7 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     show.disabled = true;
     caseSection.focus();
   });
+  showSolution.addEventListener('click', () => setSolutionShown(solution.hidden));
   next.addEventListener('click', newScramble);
 
   const isSpace = (e: KeyboardEvent) =>
