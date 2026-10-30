@@ -89,4 +89,38 @@ describe('the skin picker', () => {
     expect(app.querySelector('.case')!.innerHTML).toBe(caseHtml);
     expect(app.querySelector<HTMLElement>('.case')!.hidden).toBe(false);
   });
+
+  it('space on the gear or a skin option is left to the menu, not taken as Next', () => {
+    const { picker, options } = loadPage();
+    const app = document.getElementById('app')!;
+    renderRoute(app, '#/5x5/l2c');
+    const scramble = app.querySelector('.scramble')!.textContent;
+    for (const target of [picker.querySelector('summary')!, options()[2]]) {
+      for (const type of ['keydown', 'keyup']) {
+        const ev = new KeyboardEvent(type, { key: ' ', bubbles: true, cancelable: true });
+        target.dispatchEvent(ev);
+        expect(ev.defaultPrevented).toBe(false);
+      }
+    }
+    expect(app.querySelector('.scramble')!.textContent).toBe(scramble);
+    renderRoute(app, '#/');
+  });
+
+  it('picking a skin puts focus back on the gear', () => {
+    const { picker, options } = loadPage();
+    picker.open = true;
+    options()[1].focus();
+    options()[1].click();
+    expect(document.activeElement).toBe(picker.querySelector('summary'));
+  });
+
+  it('Escape closes the open menu and puts focus back on the gear', () => {
+    const { picker, options, stylesheet } = loadPage();
+    picker.open = true;
+    options()[3].focus();
+    options()[3].dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(picker.open).toBe(false);
+    expect(document.activeElement).toBe(picker.querySelector('summary'));
+    expect(stylesheet.getAttribute('href')).toBe('themes/plain/theme.css');
+  });
 });

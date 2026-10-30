@@ -60,6 +60,7 @@
   function buildMenu() {
     const picker = document.querySelector(".skin-picker");
     if (!picker) return;
+    const toggle = picker.querySelector(".skin-picker-toggle");
     const menu = picker.querySelector(".skin-menu");
     for (const [id, label] of SKINS) {
       const option = document.createElement("button");
@@ -84,6 +85,12 @@
       stylesheet.href = themeHref(current);
       mark();
       picker.open = false;
+      toggle.focus();
+    });
+    picker.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !picker.open) return;
+      picker.open = false;
+      toggle.focus();
     });
     // A tap anywhere outside the open menu closes it.
     document.addEventListener("click", (event) => {
