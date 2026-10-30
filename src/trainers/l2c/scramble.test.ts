@@ -1,32 +1,54 @@
 import { applyAlg, centres, faceGrid, solvedCube } from '../../cube/cube';
 import { NORMAL, rotateClockwise, sameVec } from '../../cube/geometry';
-import { OPPOSITE, move, parseAlg, type Face } from '../../cube/notation';
+import { formatAlg, invert, move, parseAlg, simplify, type Face } from '../../cube/notation';
 import { frameRotation, rewrite, SIDE_PAIRS } from '../../cube/rotation';
 import { seeded } from '../../lib/random';
 import { L2C_CASES } from './cases';
-import { buildScramble, generateL2CScramble, PREFIX_LENGTH } from './scramble';
+import { buildScramble, generateL2CScramble } from './scramble';
 
 const solvedCentres = (cube: ReturnType<typeof solvedCube>, f: Face) => centres(cube, f).flat().every((s) => s === f);
 
 describe('buildScramble', () => {
-  const random = seeded(1);
   for (const c of L2C_CASES) {
     it(`case ${c.number} lands correctly for every face pair and orientation`, () => {
       for (const [top, front] of SIDE_PAIRS) {
         for (let topTurns = 0; topTurns < 4; topTurns++) {
           for (let frontTurns = 0; frontTurns < 4; frontTurns++) {
-            const s = buildScramble({ caseIndex: c.number - 1, top, front, topTurns, frontTurns, random });
+            const s = buildScramble({ caseIndex: c.number - 1, top, front, topTurns, frontTurns });
             const cube = applyAlg(solvedCube(), parseAlg(s.text));
 
             for (const f of ['U', 'D', 'F', 'B', 'R', 'L'] as const) {
               expect(solvedCentres(cube, f)).toBe(f !== top && f !== front);
             }
             // Undo the face orientation turns, then the sheet alg rewritten for these faces: centres solve.
-            const undo = [move(front, 'outer', -frontTurns), move(top, 'outer', -topTurns)].filter((m) => m !== null);
+            const undo = [move(front, 'outer', -s.frontTurns), move(top, 'outer', -s.topTurns)].filter((m) => m !== null);
             const solved = applyAlg(applyAlg(cube, undo), rewrite(parseAlg(c.alg), frameRotation(top, front)));
             for (const f of ['U', 'D', 'F', 'B', 'R', 'L'] as const) expect(solvedCentres(solved, f)).toBe(true);
             expect(s.faces.left).toEqual(faceGrid(cube, s.left));
             expect(s.faces.right).toEqual(faceGrid(cube, s.right));
+
+            // Nothing but the case setup and the orientation turns actually applied.
+            const caseMoves = rewrite(invert(parseAlg(c.alg)), frameRotation(top, front));
+            const turns = [move(top, 'outer', s.topTurns), move(front, 'outer', s.frontTurns)].filter((m) => m !== null);
+            expect(s.text).toBe(formatAlg(simplify([...caseMoves, ...turns])));
+            for (const m of parseAlg(s.text)) {
+              if (m.layer === 'outer') expect([top, front]).toContain(m.face);
+            }
+
+            // The applied turn gives the same centres as the requested one.
+            const requested = applyAlg(
+              solvedCube(),
+              [...caseMoves, move(top, 'outer', topTurns), move(front, 'outer', frontTurns)].filter((m) => m !== null),
+            );
+            for (const f of [top, front]) expect(centres(cube, f)).toEqual(centres(requested, f));
+            // The applied turn is the fewest that gives these centres, so it is never zero-effect.
+            const setup = applyAlg(solvedCube(), caseMoves);
+            for (const [f, n] of [[top, s.topTurns], [front, s.frontTurns]] as const) {
+              for (let fewer = 0; fewer < n; fewer++) {
+                const alt = applyAlg(setup, [move(f, 'outer', fewer)].filter((m) => m !== null));
+                expect(centres(alt, f)).not.toEqual(centres(cube, f));
+              }
+            }
           }
         }
       }
@@ -47,19 +69,6 @@ describe('generateL2CScramble', () => {
 
   it('uses every combination of face orientations', () => {
     expect(new Set(scrambles.map((s) => `${s.topTurns}${s.frontTurns}`)).size).toBe(16);
-  });
-
-  it('starts with at least 20 outer turns, never two on the same face in a row', () => {
-    for (const s of scrambles.slice(0, 300)) {
-      const moves = parseAlg(s.text).slice(0, PREFIX_LENGTH);
-      expect(PREFIX_LENGTH).toBeGreaterThanOrEqual(20);
-      expect(moves.every((m) => m.layer === 'outer')).toBe(true);
-      for (let i = 1; i < moves.length; i++) expect(moves[i].face).not.toBe(moves[i - 1].face);
-      for (let i = 2; i < moves.length; i++) {
-        const sameAxisRun = moves[i - 1].face === OPPOSITE[moves[i - 2].face] && moves[i].face === moves[i - 2].face;
-        expect(sameAxisRun).toBe(false);
-      }
-    }
   });
 
   it('has no redundant moves or rotations', () => {
