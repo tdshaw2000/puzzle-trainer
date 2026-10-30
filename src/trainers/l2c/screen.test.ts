@@ -199,14 +199,18 @@ describe('L2C trainer screen', () => {
   });
 
   it('hides the solution again on Next and on space', () => {
-    const { root, button } = mount();
+    const { root, button, scramble } = mount();
     const solution = root.querySelector<HTMLElement>('.solution')!;
     button('Show solution').click();
     button('Next').click();
     expect(solution.hidden).toBe(true);
     expect(button('Show solution').getAttribute('aria-expanded')).toBe('false');
     button('Show solution').click();
+    button('Show case').click();
+    expect(solution.textContent).toBe(root.querySelector('.reference-alg')!.textContent);
+    const before = scramble();
     document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    expect(scramble()).not.toBe(before);
     expect(solution.hidden).toBe(true);
     expect(button('Show solution')).toBeDefined();
   });

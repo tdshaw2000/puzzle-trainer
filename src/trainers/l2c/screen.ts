@@ -31,7 +31,6 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   actions.append(show, showSolution, next);
   const solution = el('p', 'solution');
   solution.id = 'l2c-solution';
-  solution.setAttribute('aria-live', 'polite');
   showSolution.setAttribute('aria-controls', solution.id);
   const caseSection = el('section', 'case');
   caseSection.tabIndex = -1;

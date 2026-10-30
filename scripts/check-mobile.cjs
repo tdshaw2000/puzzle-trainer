@@ -32,6 +32,7 @@ const base = process.argv[2] || 'http://localhost:4173';
         subtree: true,
       });
     });
+    if (button === 'button.show-solution') await page.click(button);
     await page.focus(button);
     await page.keyboard.press('Space');
     await page.waitForTimeout(100);
