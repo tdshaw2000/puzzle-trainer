@@ -4,7 +4,7 @@ A personal trainer for specific parts of solving WCA puzzles, organised by puzzl
 
 Current trainers:
 
-- **5x5 › Last Two Centres** (`#/5x5/l2c`): scrambles that land on one of the 19 cases from the CubeSkills 5x5 L2C sheet, on a random pair of adjacent side faces in a random orientation. Hold yellow on top and green in front while scrambling (white stays on the bottom). After solving, "Show case" reveals the case as it was scrambled, alongside the sheet's picture and alg.
+- **5x5 › Last Two Centres** (`#/5x5/l2c`): scrambles that land on one of the 19 cases from the CubeSkills 5x5 L2C sheet, on a random pair of adjacent side faces in a random orientation. Hold yellow on top and green in front while scrambling (white stays on the bottom). After solving, "Show case" reveals the case as it was scrambled, alongside the sheet's picture and alg; select "Hide case" to hide it again.
 
 ## Development
 
