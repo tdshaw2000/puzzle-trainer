@@ -13,9 +13,16 @@ describe('trainer navigation', () => {
     expect(PUZZLES.map((p) => p.name)).toEqual(['5x5']);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
-    const link = group.querySelector('a')!;
-    expect(link.textContent).toBe('Last Two Centres');
-    expect(link.getAttribute('href')).toBe('#/5x5/l2c');
+    const links = [...group.querySelectorAll('a')];
+    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Last Two Edges']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/l2e']);
+  });
+
+  it('opens Last Two Edges from its address, with its breadcrumb and title', () => {
+    const root = show('#/5x5/l2e');
+    expect(root.querySelector('[data-trainer="l2e"] .scramble')).not.toBeNull();
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last Two Edges');
+    expect(document.title).toBe('5x5 Last Two Edges · Puzzle Trainer');
   });
 
   it('sets the page title and heading per screen', () => {

@@ -50,19 +50,32 @@ export function solvedCube(): Cube {
   return SLOTS.map(({ normal }) => faceOf(normal));
 }
 
-export function applyMove(cube: Cube, m: Move): Cube {
+/** Works on any per-slot labelling, e.g. slot indices to track where pieces go. */
+export function applyMove<T>(cube: readonly T[], m: Move): readonly T[] {
   const perm = quarterPerm(m.face, m.layer);
   let cur = cube;
   for (let t = 0; t < m.turns; t++) {
-    const next: Face[] = new Array(cur.length);
+    const next: T[] = new Array(cur.length);
     cur.forEach((s, i) => (next[perm[i]] = s));
     cur = next;
   }
   return cur;
 }
 
-export function applyAlg(cube: Cube, moves: Move[]): Cube {
-  return moves.reduce(applyMove, cube);
+export function applyAlg<T>(cube: readonly T[], moves: Move[]): readonly T[] {
+  return moves.reduce<readonly T[]>((c, m) => applyMove(c, m), cube);
+}
+
+/** Each slot labelled with its own index: after moves, cube[i] is the slot that sticker started in. */
+export function identityCube(): readonly number[] {
+  return SLOTS.map((_, i) => i);
+}
+
+/** The slot index of the sticker at `pos` facing `normal`. */
+export function slotAt(pos: Vec, normal: Vec): number {
+  const i = INDEX.get(key(pos, normal));
+  if (i === undefined) throw new Error(`No sticker at ${pos} facing ${normal}`);
+  return i;
 }
 
 /** The face as a 5x5 grid of sticker origins, read as described in geometry.ts. */
@@ -78,9 +91,7 @@ export function centres(cube: Cube, f: Face): Face[][] {
 }
 
 export function stickerAt(cube: Cube, pos: Vec, normal: Vec): Face {
-  const i = INDEX.get(key(pos, normal));
-  if (i === undefined) throw new Error(`No sticker at ${pos} facing ${normal}`);
-  return cube[i];
+  return cube[slotAt(pos, normal)];
 }
 
 export function isSolved(cube: Cube): boolean {

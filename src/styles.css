@@ -67,7 +67,7 @@
   .slice-note { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
   .actions { display: flex; gap: 10px; margin: 16px 0; }
   .actions button { flex: 1; }
-  .l2c h1 { font-size: 1.3rem; margin: 0 2.5rem 4px 0; }
+  .l2c h1, .l2e h1 { font-size: 1.3rem; margin: 0 2.5rem 4px 0; }
   .case h2 { font-size: 1.1rem; margin: 0; }
   .case:focus { outline: none; }
   button {
@@ -93,6 +93,11 @@
   .case figure { margin: 0; text-align: center; }
   .case svg.scrambled { width: 100%; max-width: 360px; }
   .case svg.reference { width: 90px; }
+  .l2e .case svg.scrambled { max-width: 220px; }
+  .l2e .case svg.reference { width: 150px; }
+  .solution-block { margin: 0 0 16px; }
+  .solution-block .solution { margin: 0; }
+  .solution-note { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
   .face-labels { margin: 4px 0 0; color: var(--muted); }
   .details { margin: 0; padding-left: 1.2rem; }
   .reference-block figcaption { color: var(--muted); font-size: 0.9rem; }

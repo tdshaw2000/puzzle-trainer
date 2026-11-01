@@ -42,3 +42,21 @@ describe('simplify', () => {
     expect(formatAlg(simplify(parseAlg("M M")))).toBe('M2');
   });
 });
+
+describe('parseAlg rotations', () => {
+  it('expands x, y and z into the three layer turns of a 5x5', () => {
+    expect(formatAlg(parseAlg('x'))).toBe("Rw M' Lw'");
+    expect(formatAlg(parseAlg("x'"))).toBe("Rw' M Lw");
+    expect(formatAlg(parseAlg('y2'))).toBe('Uw2 E2 Dw2');
+    expect(formatAlg(parseAlg('z'))).toBe("Fw S Bw'");
+  });
+
+  it('splits a rotation glued to the next move', () => {
+    expect(parseAlg("x'U2")).toEqual(parseAlg("x' U2"));
+  });
+
+  it('still rejects junk or moves glued to a move', () => {
+    expect(() => parseAlg('UQ')).toThrow();
+    expect(() => parseAlg('RU')).toThrow();
+  });
+});
