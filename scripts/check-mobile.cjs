@@ -80,6 +80,36 @@ const base = process.argv[2] || 'http://localhost:4173';
 
   }
 
+  // The site title, on every kind of page in every skin: shown, a link home, clear of the gear,
+  // and no sideways scroll.
+  const skins = await page.evaluate(() => window.PuzzleSkins.SKINS.map(([id]) => id));
+  for (const skin of skins) {
+    for (const hash of ['#/', '#/5x5/l2c', '#/5x5/l2e', '#/4x4/l2e', '#/nowhere']) {
+      await page.evaluate((id) => localStorage.setItem('puzzle-trainer-skin', id), skin);
+      await page.goto(`${base}/${hash}`);
+      await page.reload({ waitUntil: 'networkidle' });
+      const where = `${hash}: ${skin}`;
+      const result = await page.evaluate(() => {
+        const title = document.querySelector('a.site-title');
+        if (!title) return { missing: true };
+        const box = title.getBoundingClientRect();
+        const gear = document.querySelector('.skin-picker-toggle').getBoundingClientRect();
+        return {
+          text: title.textContent,
+          href: title.getAttribute('href'),
+          visible: box.width > 0 && box.height > 0 && box.left >= 0 && box.right <= window.innerWidth && box.top >= 0,
+          overlap: box.left < gear.right && box.right > gear.left && box.top < gear.bottom && box.bottom > gear.top,
+          scroll: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+      if (result.missing) { failures.push(`${where}: no site title`); continue; }
+      if (result.text !== 'Puzzle Trainer' || result.href !== '#/') failures.push(`${where}: site title is not a "Puzzle Trainer" link home`);
+      if (!result.visible) failures.push(`${where}: site title not fully on screen at 375px`);
+      if (result.overlap) failures.push(`${where}: the skin menu's gear overlaps the site title`);
+      if (result.scroll) failures.push(`${where}: horizontal scroll at 375px`);
+    }
+  }
+
   await browser.close();
   if (failures.length) {
     console.error(failures.join('\n'));

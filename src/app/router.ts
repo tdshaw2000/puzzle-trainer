@@ -22,10 +22,23 @@ function link(href: string, text: string) {
   return a;
 }
 
+/** The "Puzzle Trainer" title, a link home, at the top of every page. It is the main heading only on home. */
+function siteHeader(isHome: boolean) {
+  const header = document.createElement('header');
+  header.className = 'site-header';
+  const title = link('#/', 'Puzzle Trainer');
+  title.className = 'site-title';
+  if (isHome) {
+    const h1 = document.createElement('h1');
+    h1.append(title);
+    header.append(h1);
+  } else {
+    header.append(title);
+  }
+  return header;
+}
+
 function home(root: HTMLElement) {
-  const h1 = document.createElement('h1');
-  h1.textContent = 'Puzzle Trainer';
-  root.append(h1);
   for (const puzzle of PUZZLES) {
     const section = document.createElement('section');
     section.className = 'puzzle';
@@ -50,6 +63,7 @@ export function renderRoute(root: HTMLElement, hash: string) {
   root.replaceChildren();
 
   const route = resolve(hash);
+  root.append(siteHeader(route.kind === 'home'));
   document.title = route.kind === 'trainer' ? `${route.puzzle.name} ${route.trainer.name} · Puzzle Trainer` : 'Puzzle Trainer';
   if (route.kind === 'home') return home(root);
   if (route.kind === 'notFound') {
