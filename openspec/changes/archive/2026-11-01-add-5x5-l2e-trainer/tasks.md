@@ -20,4 +20,4 @@ Every task is test-first: write the failing tests named in the task, then implem
 
 ## 4. Wrap up
 
-- [ ] 4.1 Reviewer subagent reviews the code; address findings; merge (deploys) and archive this change into `openspec/specs`
+- [x] 4.1 Reviewer subagent reviews the code; address findings; merge (deploys) and archive this change into `openspec/specs`
