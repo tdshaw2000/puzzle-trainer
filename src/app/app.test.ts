@@ -69,6 +69,42 @@ describe('trainer navigation', () => {
     expect(root.querySelector('a[href="#/"]')).not.toBeNull();
   });
 
+  describe('site title', () => {
+    const title = (root: HTMLElement) => {
+      const links = [...root.querySelectorAll<HTMLAnchorElement>('a.site-title')];
+      expect(links).toHaveLength(1);
+      return links[0];
+    };
+
+    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/4x4/l2e', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
+      const root = show(hash);
+      const a = title(root);
+      expect(a.textContent).toBe('Puzzle Trainer');
+      expect(a.getAttribute('href')).toBe('#/');
+      expect(root.firstElementChild!.matches('header.site-header')).toBe(true);
+      expect(root.firstElementChild!.contains(a)).toBe(true);
+    });
+
+    it('is the main heading on the home page', () => {
+      const root = show('#/');
+      expect(root.querySelectorAll('h1')).toHaveLength(1);
+      expect(root.querySelector('h1 > a.site-title')!.getAttribute('aria-current')).toBe('page');
+    });
+
+    it('is not a heading on trainer pages, which keep their own heading', () => {
+      const root = show('#/4x4/l2e');
+      expect(title(root).closest('h1')).toBeNull();
+      expect(title(root).hasAttribute('aria-current')).toBe(false);
+      expect(root.querySelector('h1')!.textContent).toBe('Last Two Edges');
+    });
+
+    it('following it from a trainer opens the home page', () => {
+      const root = show('#/4x4/l2e');
+      renderRoute(root, title(root).getAttribute('href')!);
+      expect(root.querySelector('[data-puzzle="5x5"]')).not.toBeNull();
+    });
+  });
+
   it('cleans up the previous screen when the route changes', () => {
     const root = document.createElement('div');
     renderRoute(root, '#/5x5/l2c');

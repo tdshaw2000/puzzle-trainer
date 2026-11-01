@@ -16,6 +16,21 @@
   main { padding: 16px; }
   a { color: var(--accent); }
   h1 { font-size: 1.6rem; font-family: var(--display, var(--font)); margin-right: 2.5rem; }
+  /* The site title sits at the top of every page, clear of the gear menu. It reads as a heading,
+     not a link, in the heading colour each skin gives h1 and .site-title. */
+  .site-header { margin: 0.4rem 2.5rem 12px 0; }
+  .site-header h1 { margin: 0; font-size: inherit; }
+  .site-title {
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.25;
+    font-family: var(--display, var(--font));
+    color: inherit;
+    text-decoration: none;
+  }
+  .site-title:hover { text-decoration: underline; }
+  .site-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .skin-picker { position: absolute; top: 12px; right: 12px; z-index: 5; }
   .skin-picker-toggle {
     list-style: none;

@@ -29,7 +29,8 @@ body {
     #0000aa;
 }
 
-h1 {
+h1,
+.site-title {
   color: #ffffff;
   font-weight: normal;
   text-transform: uppercase;
