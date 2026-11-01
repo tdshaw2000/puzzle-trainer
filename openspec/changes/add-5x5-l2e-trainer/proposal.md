@@ -12,7 +12,7 @@ The user wants to drill the 5x5 last-two-edges (L2E, "5x5 parity") step the same
 - No filler moves. A scramble is the shortest outer-turn setup that brings the chosen edges into place, followed by the case's alg inverted (rewritten for the case's position, with no cube rotations), with redundant moves merged.
 - The practice loop matches L2C: the scramble on arrival; a "Show case" / "Hide case" toggle; a "Show solution" / "Hide solution" toggle; and "Next" (also space).
 - "Show case" shows a top-down picture of the U layer as it is after the scramble, with only the two case edges coloured. It also shows the y rotation that brings the case to the guide's position, the case number, and the guide's picture of the case (in the case's real colours).
-- "Show solution" shows the guide's alg as printed. The exception is case 1, which depends on the user's answer: as printed on the page, its alg (`M' U' R' U R' F R F' M`) solves a different case (UF and DF) than the one in its picture. `M U' R' U R' F R F' M'` solves the pictured case. **Open question for the user:** which one the trainer shows. This draft uses the corrected alg plus a note that the page prints M' ... M.
+- "Show solution" shows the guide's alg as printed. The exception is case 1: as printed on the page, its alg (`M' U' R' U R' F R F' M`) solves a different case (UF and DF) than the one in its picture. `M U' R' U R' F R F' M'` solves the pictured case. The user chose the corrected alg, shown with a note that the page prints M' ... M.
 
 ## Capabilities
 

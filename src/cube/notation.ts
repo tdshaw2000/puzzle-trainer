@@ -29,20 +29,39 @@ export function move(face: Face, layer: Layer, turns: number): Move | null {
   return { face, layer, turns: t as 1 | 2 | 3 };
 }
 
-const TOKEN = /^([UDFBRL]w?|[MES])(2'?|')?$/;
+const TOKEN = /([UDFBRL]w?|[MESxyz])(2'?|')?/y;
 
+/** On a 5x5 a whole-cube rotation is exactly these layer turns (x follows R, y follows U, z follows F). */
+const ROTATION: Record<string, Array<[Face, Layer, number]>> = {
+  x: [['R', 'wide', 1], ['L', 'slice', -1], ['L', 'wide', -1]],
+  y: [['U', 'wide', 1], ['D', 'slice', -1], ['D', 'wide', -1]],
+  z: [['F', 'wide', 1], ['F', 'slice', 1], ['B', 'wide', -1]],
+};
+
+/** Splits a whitespace-free chunk into move tokens, so glued tokens like x'U2 read as x' U2. */
+function tokens(chunk: string): Array<[string, string | undefined]> {
+  const out: Array<[string, string | undefined]> = [];
+  TOKEN.lastIndex = 0;
+  while (TOKEN.lastIndex < chunk.length) {
+    const m = TOKEN.exec(chunk);
+    if (!m) throw new Error(`Unknown move: ${chunk}`);
+    out.push([m[1], m[2]]);
+  }
+  return out;
+}
+
+/** Parses an alg. Whole-cube rotations x, y, z are expanded into their layer turns. */
 export function parseAlg(alg: string): Move[] {
   return alg
     .replace(/[()]/g, ' ')
     .split(/\s+/)
     .filter(Boolean)
-    .map((tok) => {
-      const m = TOKEN.exec(tok);
-      if (!m) throw new Error(`Unknown move: ${tok}`);
-      const [, base, suffix] = m;
+    .flatMap(tokens)
+    .flatMap(([base, suffix]) => {
       const turns = suffix === "'" ? 3 : suffix ? 2 : 1;
-      if (SLICE_FACE[base]) return move(SLICE_FACE[base], 'slice', turns)!;
-      return move(base[0] as Face, base.length > 1 ? 'wide' : 'outer', turns)!;
+      if (ROTATION[base]) return ROTATION[base].map(([f, layer, k]) => move(f, layer, k * turns)!);
+      if (SLICE_FACE[base]) return [move(SLICE_FACE[base], 'slice', turns)!];
+      return [move(base[0] as Face, base.length > 1 ? 'wide' : 'outer', turns)!];
     });
 }
 

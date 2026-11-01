@@ -66,3 +66,16 @@ describe('5x5 simulator', () => {
     expect(isSolved(apply("Rw U' M' U Rw' U' M M' U Rw U' M U Rw'"))).toBe(true);
   });
 });
+
+describe('rotations', () => {
+  it('x, y and z turn the whole cube like R, U and F', () => {
+    for (const [rot, face] of [['x', 'R'], ['y', 'U'], ['z', 'F']] as const) {
+      const cube = applyAlg(solvedCube(), parseAlg(rot));
+      // every sticker on the turning axis face stays on that face; the cube is just reoriented
+      expect(faceGrid(cube, face).flat().every((s) => s === face)).toBe(true);
+      expect(applyAlg(cube, parseAlg(`${rot}'`))).toEqual(solvedCube());
+    }
+    const x = applyAlg(solvedCube(), parseAlg('x'));
+    expect(faceGrid(x, 'U').flat().every((s) => s === 'F')).toBe(true);
+  });
+});

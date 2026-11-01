@@ -35,7 +35,7 @@ While the case is shown, the toggle SHALL read "Hide case", and using it SHALL h
 - **THEN** every coloured sticker in the picture has the colour that position has after applying the scramble to a solved cube held yellow-top, green-front
 
 ### Requirement: The solution can be shown on demand
-The screen SHALL offer a "Show solution" toggle, separate from "Show case". Using it SHALL show only the case's alg, with no picture or case number. It is the alg defined for the case (the guide's alg as printed, with the case 1 exception in `l2e-scramble-generation`). When case 1 uses the corrected alg, a short note under it SHALL say that the guide prints `M' U' R' U R' F R F' M`. While shown, the toggle SHALL read "Hide solution", and using it SHALL hide the solution. It SHALL work independently of "Show case".
+The screen SHALL offer a "Show solution" toggle, separate from "Show case". Using it SHALL show only the case's alg, with no picture or case number. It is the alg defined for the case (the guide's alg as printed, with the case 1 exception in `l2e-scramble-generation`). For case 1, a short note under it SHALL say that the guide prints `M' U' R' U R' F R F' M`. For case 6, whose printed alg ends with the cube turned (white no longer on D), a note SHALL say that x puts white back on the bottom. While shown, the toggle SHALL read "Hide solution", and using it SHALL hide the solution. It SHALL work independently of "Show case".
 
 #### Scenario: Showing the solution
 - **WHEN** the user selects "Show solution" for a scramble of case N
