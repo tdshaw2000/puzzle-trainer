@@ -29,6 +29,7 @@ function siteHeader(isHome: boolean) {
   const title = link('#/', 'Puzzle Trainer');
   title.className = 'site-title';
   if (isHome) {
+    title.setAttribute('aria-current', 'page');
     const h1 = document.createElement('h1');
     h1.append(title);
     header.append(h1);

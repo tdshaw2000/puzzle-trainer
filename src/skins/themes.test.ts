@@ -47,7 +47,7 @@ describe('the skins', () => {
 
   // The site title is a link on every page but should look like the skin's heading.
   it.each(SKINS)('%s styles the site title wherever it styles h1', (id) => {
-    for (const [, selectors] of sheet(id).matchAll(/(?:^|\})\s*([^{}]+)\{/g)) {
+    for (const [, selectors] of sheet(id).replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(?:^|\})\s*([^{}]+)\{/g)) {
       const list = selectors.split(',').map((x) => x.trim());
       if (list.includes('h1')) expect(list, selectors).toContain('.site-title');
     }

@@ -88,12 +88,13 @@ describe('trainer navigation', () => {
     it('is the main heading on the home page', () => {
       const root = show('#/');
       expect(root.querySelectorAll('h1')).toHaveLength(1);
-      expect(root.querySelector('h1 > a.site-title')).not.toBeNull();
+      expect(root.querySelector('h1 > a.site-title')!.getAttribute('aria-current')).toBe('page');
     });
 
     it('is not a heading on trainer pages, which keep their own heading', () => {
       const root = show('#/4x4/l2e');
       expect(title(root).closest('h1')).toBeNull();
+      expect(title(root).hasAttribute('aria-current')).toBe(false);
       expect(root.querySelector('h1')!.textContent).toBe('Last Two Edges');
     });
 
