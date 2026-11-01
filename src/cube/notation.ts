@@ -31,28 +31,44 @@ export function move(face: Face, layer: Layer, turns: number): Move | null {
 
 const TOKEN = /([UDFBRL]w?|[MESxyz])(2'?|')?/y;
 
-/** On a 5x5 a whole-cube rotation is exactly these layer turns (x follows R, y follows U, z follows F). */
-const ROTATION: Record<string, Array<[Face, Layer, number]>> = {
-  x: [['R', 'wide', 1], ['L', 'slice', -1], ['L', 'wide', -1]],
-  y: [['U', 'wide', 1], ['D', 'slice', -1], ['D', 'wide', -1]],
-  z: [['F', 'wide', 1], ['F', 'slice', 1], ['B', 'wide', -1]],
+/**
+ * A whole-cube rotation as layer turns (x follows R, y follows U, z follows F): on the 5x5 the
+ * two wide turns and the central slice, on the 4x4 the two wide turns.
+ */
+const ROTATION: Record<number, Record<string, Array<[Face, Layer, number]>>> = {
+  5: {
+    x: [['R', 'wide', 1], ['L', 'slice', -1], ['L', 'wide', -1]],
+    y: [['U', 'wide', 1], ['D', 'slice', -1], ['D', 'wide', -1]],
+    z: [['F', 'wide', 1], ['F', 'slice', 1], ['B', 'wide', -1]],
+  },
+  4: {
+    x: [['R', 'wide', 1], ['L', 'wide', -1]],
+    y: [['U', 'wide', 1], ['D', 'wide', -1]],
+    z: [['F', 'wide', 1], ['B', 'wide', -1]],
+  },
 };
 
-/** Splits a whitespace-free chunk into move tokens. Only a rotation may have a move glued after it (the guide's x'U2). */
+/**
+ * Splits a whitespace-free chunk into move tokens. A move may be glued only after a rotation or
+ * after a move ending in ' or 2 (the sheets' x'U2, U2Rw' and F'R), where the split is unambiguous.
+ */
 function tokens(chunk: string): Array<[string, string | undefined]> {
   const out: Array<[string, string | undefined]> = [];
   TOKEN.lastIndex = 0;
   while (TOKEN.lastIndex < chunk.length) {
     const m = TOKEN.exec(chunk);
     if (!m) throw new Error(`Unknown move: ${chunk}`);
-    if (out.length && !'xyz'.includes(out[out.length - 1][0])) throw new Error(`Unknown move: ${chunk}`);
+    const prev = out[out.length - 1];
+    if (prev && !'xyz'.includes(prev[0]) && !prev[1]) throw new Error(`Unknown move: ${chunk}`);
     out.push([m[1], m[2]]);
   }
   return out;
 }
 
-/** Parses an alg. Whole-cube rotations x, y, z are expanded into their layer turns. */
-export function parseAlg(alg: string): Move[] {
+/** Parses an alg for an N×N cube (5x5 or 4x4). Whole-cube rotations x, y, z are expanded into their layer turns. */
+export function parseAlg(alg: string, size = 5): Move[] {
+  const rotation = ROTATION[size];
+  if (!rotation) throw new Error(`Unsupported cube size: ${size}`);
   return alg
     .replace(/[()]/g, ' ')
     .split(/\s+/)
@@ -60,8 +76,11 @@ export function parseAlg(alg: string): Move[] {
     .flatMap(tokens)
     .flatMap(([base, suffix]) => {
       const turns = suffix === "'" ? 3 : suffix ? 2 : 1;
-      if (ROTATION[base]) return ROTATION[base].map(([f, layer, k]) => move(f, layer, k * turns)!);
-      if (SLICE_FACE[base]) return [move(SLICE_FACE[base], 'slice', turns)!];
+      if (rotation[base]) return rotation[base].map(([f, layer, k]) => move(f, layer, k * turns)!);
+      if (SLICE_FACE[base]) {
+        if (size % 2 === 0) throw new Error(`No ${base} slice on a ${size}x${size}`);
+        return [move(SLICE_FACE[base], 'slice', turns)!];
+      }
       return [move(base[0] as Face, base.length > 1 ? 'wide' : 'outer', turns)!];
     });
 }

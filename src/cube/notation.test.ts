@@ -60,3 +60,19 @@ describe('parseAlg rotations', () => {
     expect(() => parseAlg('RU')).toThrow();
   });
 });
+
+describe('parseAlg on the 4x4', () => {
+  it('expands rotations into the 4x4 wide turns', () => {
+    expect(formatAlg(parseAlg('x', 4))).toBe("Rw Lw'");
+    expect(formatAlg(parseAlg("y'", 4))).toBe("Uw' Dw");
+    expect(formatAlg(parseAlg('z2', 4))).toBe('Fw2 Bw2');
+  });
+
+  it('reads moves glued after a move ending in a suffix', () => {
+    expect(parseAlg("U2Rw'", 4)).toEqual(parseAlg("U2 Rw'", 4));
+    expect(parseAlg("F'R")).toEqual(parseAlg("F' R"));
+    expect(parseAlg("U2'R")).toEqual(parseAlg('U2 R'));
+    expect(() => parseAlg('RU')).toThrow();
+    expect(() => parseAlg("R'Q")).toThrow();
+  });
+});
