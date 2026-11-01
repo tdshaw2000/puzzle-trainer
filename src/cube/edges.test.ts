@@ -39,3 +39,8 @@ describe('4x4 edges', () => {
     expect(unpairedEdges(apply('Rw'), 4).sort()).toEqual(['DB', 'DF', 'UB', 'UF']);
   });
 });
+
+it('works out the cube size from the sticker count', () => {
+  const c4 = cubeModel(4);
+  expect(unpairedEdges(c4.applyAlg(c4.solved(), parseAlg('Rw', 4))).sort()).toEqual(['DB', 'DF', 'UB', 'UF']);
+});

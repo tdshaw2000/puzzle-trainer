@@ -98,15 +98,20 @@ export function invert(moves: Move[]): Move[] {
   return [...moves].reverse().map((m) => move(m.face, m.layer, -m.turns)!);
 }
 
-/** Merges adjacent turns of the same layer and drops turns that cancel. */
+const AXIS: Record<Face, string> = { R: 'x', L: 'x', U: 'y', D: 'y', F: 'z', B: 'z' };
+
+/**
+ * Merges turns of the same layer and drops turns that cancel. Turns about the same axis commute,
+ * so a turn merges with an earlier one of its layer even with same-axis turns in between.
+ */
 export function simplify(moves: Move[]): Move[] {
   const out: Move[] = [];
   for (const m of moves) {
-    const last = out[out.length - 1];
-    if (last && last.face === m.face && last.layer === m.layer) {
-      out.pop();
-      const merged = move(m.face, m.layer, last.turns + m.turns);
-      if (merged) out.push(merged);
+    let j = out.length - 1;
+    while (j >= 0 && AXIS[out[j].face] === AXIS[m.face] && !(out[j].face === m.face && out[j].layer === m.layer)) j--;
+    if (j >= 0 && out[j].face === m.face && out[j].layer === m.layer) {
+      const merged = move(m.face, m.layer, out[j].turns + m.turns);
+      out.splice(j, 1, ...(merged ? [merged] : []));
     } else {
       out.push(m);
     }

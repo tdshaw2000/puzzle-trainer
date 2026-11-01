@@ -8,6 +8,7 @@ import { L2E4 } from './cases';
 
 const c4 = cubeModel(4);
 const EDGES = edgesFor(4);
+const AXIS: Record<string, string> = { R: 'x', L: 'x', U: 'y', D: 'y', F: 'z', B: 'z' };
 const many = (n: number, seed = 1) => {
   const r = seeded(seed);
   return Array.from({ length: n }, () => L2E4.generate(r));
@@ -33,7 +34,12 @@ describe('4x4 L2E scramble', () => {
     for (const s of many(100)) {
       expect(s.text).not.toMatch(/[xyzMES]/);
       const moves = parseAlg(s.text, 4);
-      moves.slice(1).forEach((m, i) => expect([m.face, m.layer]).not.toEqual([moves[i].face, moves[i].layer]));
+      // no turn of a layer that an earlier turn of that layer could have merged with
+      moves.forEach((m, i) => {
+        for (let j = i - 1; j >= 0 && AXIS[moves[j].face] === AXIS[m.face]; j--) {
+          expect([moves[j].face, moves[j].layer]).not.toEqual([m.face, m.layer]);
+        }
+      });
     }
   });
 

@@ -24,6 +24,12 @@ describe('invert', () => {
 });
 
 describe('simplify', () => {
+  it('merges turns of the same layer separated only by turns on the same axis', () => {
+    expect(formatAlg(simplify(parseAlg("Rw2 Lw' Rw", 4)))).toBe("Rw' Lw'");
+    expect(formatAlg(simplify(parseAlg("Rw L M' Rw'")))).toBe("L M'");
+    expect(formatAlg(simplify(parseAlg("Rw U Rw")))).toBe('Rw U Rw');
+  });
+
   it('merges adjacent turns of the same layer', () => {
     expect(formatAlg(simplify(parseAlg('U U')))).toBe('U2');
     expect(formatAlg(simplify(parseAlg("Rw U' Rw' Rw U' Rw'")))).toBe("Rw U2 Rw'");

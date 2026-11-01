@@ -43,13 +43,16 @@ export function edgeStickers<T>(cube: readonly T[], edge: Edge, at: (cube: reado
 }
 
 /** Paired: every piece in the slot shows the same two colours the same way round. */
-export function isPaired(cube: Cube, edge: Edge, size = 5): boolean {
+/** The size of an N×N cube from its sticker count. */
+const sizeOf = (cube: Cube) => Math.round(Math.sqrt(cube.length / 6));
+
+export function isPaired(cube: Cube, edge: Edge, size = sizeOf(cube)): boolean {
   const model = cubeModel(size);
   const reads = edgeStickers(cube, edge, model.stickerAt).map(([a, b]) => a + b);
   return reads.every((r) => r === reads[0]);
 }
 
-export function unpairedEdges(cube: Cube, size = 5): string[] {
+export function unpairedEdges(cube: Cube, size = sizeOf(cube)): string[] {
   return edgesFor(size)
     .filter((e) => !isPaired(cube, e, size))
     .map(edgeName);

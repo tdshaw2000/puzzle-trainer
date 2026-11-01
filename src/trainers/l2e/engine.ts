@@ -208,6 +208,7 @@ export function l2eEngine(def: L2EDefinition): L2EEngine {
     const c = def.cases[caseIndex];
     const caseMoves = rewrite(caseSetup(caseIndex), frameRotation('U', position));
     const sources = caseSources(caseMoves, caseIndex, position);
+    if (sources.length > choice.edges.length) throw new Error(`Case ${c.number} needs ${sources.length} edges, ${choice.edges.length} chosen`);
     const starts = choice.edges.slice(0, sources.length).map(({ edge }) => ({
       pos: edges[edge].mid,
       normal: NORMAL[edges[edge].faces[0]],

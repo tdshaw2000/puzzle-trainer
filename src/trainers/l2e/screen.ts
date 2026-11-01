@@ -1,10 +1,9 @@
 import { FACE_COLOUR } from '../../cube/colours';
-import { stickerAt } from '../../cube/cube';
+import { stickerAt, type Cube } from '../../cube/cube';
 import { frameRotation } from '../../cube/rotation';
 import type { Face } from '../../cube/notation';
 import type { Random } from '../../lib/random';
 import type { Vec } from '../../cube/geometry';
-import type { Cube } from '../../cube/cube';
 import { renderTopView } from './render';
 import { generateL2EScramble, type L2EScramble } from './scramble';
 
