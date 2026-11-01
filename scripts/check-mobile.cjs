@@ -11,8 +11,8 @@ const base = process.argv[2] || 'http://localhost:4173';
   const failures = [];
   page.on('pageerror', (e) => failures.push(`page error: ${e.message}`));
 
-  for (const trainer of ['l2c', 'l2e']) {
-    await page.goto(`${base}/#/5x5/${trainer}`);
+  for (const trainer of ['5x5/l2c', '5x5/l2e', '4x4/l2e']) {
+    await page.goto(`${base}/#/${trainer}`);
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.click('button.show-solution');
@@ -31,7 +31,7 @@ const base = process.argv[2] || 'http://localhost:4173';
     }
 
     for (const button of ['button.next', 'button.show', 'button.show-solution']) {
-      await page.goto(`${base}/#/5x5/${trainer}`);
+      await page.goto(`${base}/#/${trainer}`);
       await page.reload();
       await page.evaluate(() => {
         window.changes = 0;
@@ -56,7 +56,7 @@ const base = process.argv[2] || 'http://localhost:4173';
     const skins = await page.evaluate(() => window.PuzzleSkins.SKINS.map(([id]) => id));
     for (const skin of skins) {
       await page.evaluate((id) => localStorage.setItem('puzzle-trainer-skin', id), skin);
-      await page.goto(`${base}/#/5x5/${trainer}`);
+      await page.goto(`${base}/#/${trainer}`);
       await page.reload({ waitUntil: 'networkidle' });
       await page.click('button.show-solution');
       await page.click('text=Show case');

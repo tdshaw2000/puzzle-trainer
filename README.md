@@ -5,6 +5,7 @@ A personal trainer for specific parts of solving WCA puzzles, organised by puzzl
 Current trainers:
 
 - **5x5 › Last Two Centres** (`#/5x5/l2c`): scrambles that land on one of the 19 cases from the CubeSkills 5x5 L2C sheet, on a random pair of adjacent side faces in a random orientation. A scramble is only the case setup plus at most one turn of each case face, with no filler moves. Hold yellow on top and green in front while scrambling (white stays on the bottom). After solving, "Show case" reveals the case as it was scrambled, alongside the sheet's picture and alg; select "Hide case" to hide it again.
+- **4x4 › Last Two Edges** (`#/4x4/l2e`): scrambles that land on one of the 5 cases from the CubeSkills sheet "4x4 – Useful Last 2 Edge Algorithms", with random edge colours and a random y position. A scramble is a shortest outer-turn setup plus the case's alg inverted, with no filler moves. "Show case" draws the cube as a net (U with the sides folded out) next to the sheet's view; "Show solution" shows the sheet's main alg as printed.
 
 The ⚙ menu in the top-right corner changes the skin: Minimal (the default), Dark, DOS, Mario, Monkey or VHS, the same set as the owner's other apps. The choice is remembered in the browser. Skins live in `public/themes/<skin>/theme.css` and are picked by `public/skin.js`; `src/styles.css` holds only layout.
 
