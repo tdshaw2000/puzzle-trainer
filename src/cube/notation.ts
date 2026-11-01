@@ -38,13 +38,14 @@ const ROTATION: Record<string, Array<[Face, Layer, number]>> = {
   z: [['F', 'wide', 1], ['F', 'slice', 1], ['B', 'wide', -1]],
 };
 
-/** Splits a whitespace-free chunk into move tokens, so glued tokens like x'U2 read as x' U2. */
+/** Splits a whitespace-free chunk into move tokens. Only a rotation may have a move glued after it (the guide's x'U2). */
 function tokens(chunk: string): Array<[string, string | undefined]> {
   const out: Array<[string, string | undefined]> = [];
   TOKEN.lastIndex = 0;
   while (TOKEN.lastIndex < chunk.length) {
     const m = TOKEN.exec(chunk);
     if (!m) throw new Error(`Unknown move: ${chunk}`);
+    if (out.length && !'xyz'.includes(out[out.length - 1][0])) throw new Error(`Unknown move: ${chunk}`);
     out.push([m[1], m[2]]);
   }
   return out;

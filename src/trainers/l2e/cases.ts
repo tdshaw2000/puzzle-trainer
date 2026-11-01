@@ -71,10 +71,14 @@ const centresHome = (cube: readonly Face[]) =>
  * The whole-cube rotation that puts the centres back home after the case's alg, '' for most.
  * Case 6's alg ends with the cube turned (an x' inside it isn't undone), so the solver re-grips.
  */
+const REGRIPS = new Map<number, string>();
 export function regrip(i: number): string {
+  const cached = REGRIPS.get(i);
+  if (cached !== undefined) return cached;
   const moves = parseAlg(L2E_CASES[i].alg);
   const r = ROTATIONS.find((rot) => centresHome(applyAlg(solvedCube(), [...moves, ...parseAlg(rot)])));
   if (r === undefined) throw new Error(`Case ${i + 1}'s alg does not solve the centres`);
+  REGRIPS.set(i, r);
   return r;
 }
 
@@ -87,4 +91,8 @@ const caseCube = (i: number) => applyAlg(identityCube(), caseSetup(i));
 export const casePattern = (i: number) => patternOf(caseCube(i), 'F');
 
 /** True when the case looks the same from behind (after y2). */
-export const isY2Symmetric = (i: number) => patternOf(caseCube(i), 'B') === casePattern(i);
+const SYMMETRIC = new Map<number, boolean>();
+export function isY2Symmetric(i: number): boolean {
+  if (!SYMMETRIC.has(i)) SYMMETRIC.set(i, patternOf(caseCube(i), 'B') === casePattern(i));
+  return SYMMETRIC.get(i)!;
+}

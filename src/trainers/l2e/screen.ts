@@ -1,4 +1,7 @@
 import { FACE_COLOUR } from '../../cube/colours';
+import { stickerAt } from '../../cube/cube';
+import { frameRotation } from '../../cube/rotation';
+import type { Face } from '../../cube/notation';
 import type { Random } from '../../lib/random';
 import { renderTopView } from './render';
 import { generateL2EScramble, type L2EScramble } from './scramble';
@@ -14,10 +17,23 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
 const SLICE_NOTES: Record<string, string> = {
   M: 'M turns only the central slice, the same way as L.',
   S: 'S turns only the central slice, the same way as F.',
-  E: 'E turns only the central slice, the same way as D.',
 };
 
 const fill = (f: keyof typeof FACE_COLOUR) => FACE_COLOUR[f].hex;
+
+/** Spoken description of the case edges: each piece as top colour / side colour, left to right. */
+function describeEdges(s: L2EScramble): string {
+  const { vec } = frameRotation('U', s.position);
+  const edge = (z: number, label: string) => {
+    const pieces = [-1, 0, 1].map((x) => {
+      const pos = vec([x, 2, z]);
+      const name = (n: readonly [number, number, number]) => FACE_COLOUR[stickerAt(s.cube, pos, vec(n)) as Face].name;
+      return `${name([0, 1, 0])}/${name([0, 0, Math.sign(z)])}`;
+    });
+    return `${label}: left wing ${pieces[0]}, midge ${pieces[1]}, right wing ${pieces[2]}`;
+  };
+  return `${edge(2, "guide's front edge")}; ${edge(-2, "guide's back edge")}`;
+}
 
 /** Mounts the 5x5 Last Two Edges trainer. Returns a cleanup function. */
 export function mountL2E(container: HTMLElement, random: Random = Math.random): () => void {
@@ -48,7 +64,7 @@ export function mountL2E(container: HTMLElement, random: Random = Math.random): 
   function renderCase(s: L2EScramble) {
     const picture = renderTopView(s.cube, 'F', s.casePieces, fill);
     picture.classList.add('scrambled');
-    picture.setAttribute('aria-label', 'Top layer after the scramble, green side at the bottom');
+    picture.setAttribute('aria-label', `Top layer after the scramble, green side at the bottom. ${describeEdges(s)}`);
     const scrambled = el('figure', 'scrambled-block');
     scrambled.append(picture, el('figcaption', 'face-labels', 'From above, green side at the bottom'));
 
@@ -60,7 +76,7 @@ export function mountL2E(container: HTMLElement, random: Random = Math.random): 
 
     const guide = renderTopView(s.cube, s.position, s.casePieces, fill);
     guide.classList.add('reference');
-    guide.setAttribute('aria-label', `Guide picture of case ${s.caseNumber}`);
+    guide.setAttribute('aria-label', `Guide picture of case ${s.caseNumber}. ${describeEdges(s)}`);
     const refBlock = el('figure', 'reference-block');
     refBlock.append(guide, el('figcaption', undefined, "Guide picture in this case's colours, after the rotation"));
 
@@ -89,7 +105,7 @@ export function mountL2E(container: HTMLElement, random: Random = Math.random): 
     const focusWasInCase = caseSection.contains(document.activeElement);
     current = generateL2EScramble(random);
     scrambleText.textContent = current.text;
-    const slices = ['M', 'S', 'E'].filter((s) => new RegExp(`\\b${s}`).test(current.text));
+    const slices = ['M', 'S'].filter((s) => new RegExp(`\\b${s}`).test(current.text));
     sliceNote.textContent = slices.map((s) => SLICE_NOTES[s]).join(' ');
     sliceNote.hidden = slices.length === 0;
     setShown(false);

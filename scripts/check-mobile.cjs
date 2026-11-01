@@ -12,8 +12,8 @@ const base = process.argv[2] || 'http://localhost:4173';
   page.on('pageerror', (e) => failures.push(`page error: ${e.message}`));
 
   for (const trainer of ['l2c', 'l2e']) {
-    await page.evaluate(() => localStorage.clear()).catch(() => {});
     await page.goto(`${base}/#/5x5/${trainer}`);
+    await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.click('button.show-solution');
     await page.click('text=Show case');

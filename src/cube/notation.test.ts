@@ -55,7 +55,8 @@ describe('parseAlg rotations', () => {
     expect(parseAlg("x'U2")).toEqual(parseAlg("x' U2"));
   });
 
-  it('still rejects junk glued to a move', () => {
+  it('still rejects junk or moves glued to a move', () => {
     expect(() => parseAlg('UQ')).toThrow();
+    expect(() => parseAlg('RU')).toThrow();
   });
 });

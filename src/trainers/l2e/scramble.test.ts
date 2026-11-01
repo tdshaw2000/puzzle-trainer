@@ -76,4 +76,28 @@ describe('L2E scramble', () => {
     expect(s.printedAlg).toBe("M' U' R' U R' F R F' M");
     expect(buildScramble({ caseIndex: 5, position: 'F', edges: [{ edge: 0, flipped: false }, { edge: 1, flipped: false }] }).regrip).toBe('x');
   });
+
+  it('for every case and position, the hint then the alg pairs every edge', () => {
+    for (let caseIndex = 0; caseIndex < 12; caseIndex++) {
+      for (const position of POSITIONS) {
+        const s = buildScramble({ caseIndex, position, edges: [{ edge: 4, flipped: true }, { edge: 9, flipped: false }] });
+        const solve = `${s.yHint} ${s.caseAlg} ${s.regrip}`;
+        expect(unpairedEdges(applyAlg(s.cube, parseAlg(solve)))).toEqual([]);
+      }
+    }
+  });
+
+  it('the chosen edges are the ones in the case', () => {
+    const colours = (s: ReturnType<typeof buildScramble>) =>
+      new Set(
+        [`U${s.position}`, `U${OPP[s.position as keyof typeof OPP]}`].flatMap((n) =>
+          edgeStickers(s.cube, EDGES.find((e) => edgeName(e) === n)!, stickerAt).map(([a, b]) => [a, b].sort().join('')),
+        ),
+      );
+    for (let caseIndex = 0; caseIndex < 12; caseIndex++) {
+      const s = buildScramble({ caseIndex, position: 'R', edges: [{ edge: 4, flipped: false }, { edge: 9, flipped: true }] });
+      const chosen = [4, 9].map((i) => [...EDGES[i].faces].sort().join(''));
+      expect([...colours(s)].sort()).toEqual(chosen.sort());
+    }
+  });
 });
