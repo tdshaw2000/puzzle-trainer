@@ -7,6 +7,7 @@ import { L2E_CASES, casePattern, patternOf } from './cases';
 import { POSITIONS, buildScramble, generateL2EScramble, shortestSetup } from './scramble';
 
 const OPP = { F: 'B', R: 'L', B: 'F', L: 'R' } as const;
+const AXIS: Record<string, string> = { R: 'x', L: 'x', U: 'y', D: 'y', F: 'z', B: 'z' };
 const many = (n: number, seed = 1) => {
   const r = seeded(seed);
   return Array.from({ length: n }, () => generateL2EScramble(r));
@@ -31,7 +32,12 @@ describe('L2E scramble', () => {
     for (const s of many(100)) {
       expect(s.text).not.toMatch(/[xyz]/);
       const moves = parseAlg(s.text);
-      moves.slice(1).forEach((m, i) => expect([m.face, m.layer]).not.toEqual([moves[i].face, moves[i].layer]));
+      // no turn of a layer that an earlier turn of that layer could have merged with
+      moves.forEach((m, i) => {
+        for (let j = i - 1; j >= 0 && AXIS[moves[j].face] === AXIS[m.face]; j--) {
+          expect([moves[j].face, moves[j].layer]).not.toEqual([m.face, m.layer]);
+        }
+      });
     }
   });
 

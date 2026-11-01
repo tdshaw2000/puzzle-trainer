@@ -24,6 +24,12 @@ describe('invert', () => {
 });
 
 describe('simplify', () => {
+  it('merges turns of the same layer separated only by turns on the same axis', () => {
+    expect(formatAlg(simplify(parseAlg("Rw2 Lw' Rw", 4)))).toBe("Rw' Lw'");
+    expect(formatAlg(simplify(parseAlg("Rw L M' Rw'")))).toBe("L M'");
+    expect(formatAlg(simplify(parseAlg("Rw U Rw")))).toBe('Rw U Rw');
+  });
+
   it('merges adjacent turns of the same layer', () => {
     expect(formatAlg(simplify(parseAlg('U U')))).toBe('U2');
     expect(formatAlg(simplify(parseAlg("Rw U' Rw' Rw U' Rw'")))).toBe("Rw U2 Rw'");
@@ -58,5 +64,21 @@ describe('parseAlg rotations', () => {
   it('still rejects junk or moves glued to a move', () => {
     expect(() => parseAlg('UQ')).toThrow();
     expect(() => parseAlg('RU')).toThrow();
+  });
+});
+
+describe('parseAlg on the 4x4', () => {
+  it('expands rotations into the 4x4 wide turns', () => {
+    expect(formatAlg(parseAlg('x', 4))).toBe("Rw Lw'");
+    expect(formatAlg(parseAlg("y'", 4))).toBe("Uw' Dw");
+    expect(formatAlg(parseAlg('z2', 4))).toBe('Fw2 Bw2');
+  });
+
+  it('reads moves glued after a move ending in a suffix', () => {
+    expect(parseAlg("U2Rw'", 4)).toEqual(parseAlg("U2 Rw'", 4));
+    expect(parseAlg("F'R")).toEqual(parseAlg("F' R"));
+    expect(parseAlg("U2'R")).toEqual(parseAlg('U2 R'));
+    expect(() => parseAlg('RU')).toThrow();
+    expect(() => parseAlg("R'Q")).toThrow();
   });
 });
