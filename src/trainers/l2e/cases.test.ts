@@ -24,7 +24,7 @@ describe('L2E cases', () => {
   it('has the 12 guide cases in page order', () => {
     expect(L2E_CASES.map((c) => c.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
     expect(L2E_CASES[1].alg).toBe('Rw2 F2 U2 Rw2 U2 F2 Rw2');
-    expect(L2E_CASES[5].alg).toBe("Rw2 B2 Rw' U2 Rw' U2' x'U2 Rw' U2' Rw U2 Rw' U2' Rw2");
+    expect(L2E_CASES[5].alg).toBe("Rw2 B2 Rw' U2 Rw' U2' x' U2 Rw' U2' Rw U2 Rw' U2' Rw2");
   });
 
   it('case 1 uses the corrected alg and remembers the printed one', () => {
