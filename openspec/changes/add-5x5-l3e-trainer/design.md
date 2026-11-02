@@ -14,7 +14,7 @@ A scramble is a random walk from solved over moves that a 3-2-3 solver would use
 
 Each step may be preceded by a U turn. A step is kept only if, after it, at most 3 edges are unpaired and none of them is outside the middle layer. The walk takes at least 3 slice-flip steps (so the pieces of the 3 edges are well mixed) and stops at the first point after that where exactly 3 edges are unpaired. The kept moves are merged with `simplify`.
 
-A prototype run of this on the 5x5 model over 300 seeds gave: every set of three middle-layer slots, every one of the 8 non-white edge colours in the case, centres and cross intact every time, and scrambles of 23 to 86 moves, 36 on average. If long scrambles turn out to be annoying, a length cap with retry is an easy follow-up.
+A prototype run of this on the 5x5 model over 300 seeds gave: every set of three middle-layer slots, every one of the 8 non-white edge colours in the case, centres and cross intact every time, and scrambles of 23 to 86 moves, 36 on average. Walks whose scramble would be over 60 moves are started again (added during code review), so scrambles are at most 60 moves.
 
 Alternatives considered: picking a random target state directly needs a 5x5 solver to turn it into moves, which is far more work for the same result. A fixed list of a few hand-made cases would not give the variety asked for.
 

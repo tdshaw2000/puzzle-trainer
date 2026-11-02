@@ -85,7 +85,7 @@ const base = process.argv[2] || 'http://localhost:4173';
   // and no sideways scroll.
   const skins = await page.evaluate(() => window.PuzzleSkins.SKINS.map(([id]) => id));
   for (const skin of skins) {
-    for (const hash of ['#/', '#/5x5/l2c', '#/5x5/l2e', '#/4x4/l2e', '#/nowhere']) {
+    for (const hash of ['#/', '#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e', '#/4x4/l2e', '#/nowhere']) {
       await page.evaluate((id) => localStorage.setItem('puzzle-trainer-skin', id), skin);
       await page.goto(`${base}/${hash}`);
       await page.reload({ waitUntil: 'networkidle' });

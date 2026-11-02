@@ -18,12 +18,17 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
   return e;
 }
 
-/** Spoken description of the unpaired slots: each piece's two colours, slot by slot. */
+const PIECE_NAMES = ['lower wing', 'midge', 'upper wing'];
+
+/** Spoken description of the unpaired slots: each piece's two colours, bottom to top, slot by slot. */
 function describe(s: L3EScramble): string {
   return edgesFor(5)
     .filter((e) => s.unpaired.includes(e.faces.join('')))
     .map((e) => {
-      const pieces = e.pieces.map((p) => e.faces.map((f) => FACE_COLOUR[c5.stickerAt(s.cube, p, NORMAL[f])].name).join('/'));
+      // middle-layer pieces run bottom to top
+      const pieces = [...e.pieces]
+        .sort((a, b) => a[1] - b[1])
+        .map((p, i) => `${PIECE_NAMES[i]} ${e.faces.map((f) => FACE_COLOUR[c5.stickerAt(s.cube, p, NORMAL[f])].name).join('/')}`);
       return `${e.faces.join('')}: ${pieces.join(', ')}`;
     })
     .join('; ');

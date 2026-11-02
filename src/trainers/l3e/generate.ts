@@ -13,7 +13,7 @@ import { pick, type Random } from '../../lib/random';
 const c5 = cubeModel(5);
 const P = (alg: string) => parseAlg(alg, 5);
 
-/** The four vertical middle-layer slots, in F, R, B, L order, named as `unpairedEdges` names them. */
+/** The four vertical middle-layer slots (front pair, then back pair), named as `unpairedEdges` names them. */
 export const MIDDLE_SLOTS = ['FR', 'FL', 'BR', 'BL'] as const;
 
 export interface Step {
@@ -40,8 +40,12 @@ const SLICE_FLIPS = STEPS.filter((s) => s.kind === 'slice-flip');
 const INSERT_STEPS = STEPS.filter((s) => s.kind === 'insert');
 const U_TURNS = ['', 'U', 'U2', "U'"].map(P);
 const MIN_SLICE_FLIPS = 3;
-/** Gives up on a walk that wanders this long without reaching exactly 3 (never seen in practice). */
-const MAX_TRIES = 2000;
+/** Starts a walk again after this many tries without reaching exactly 3. */
+const MAX_TRIES = 200;
+/** Walks giving longer scrambles are started again, so a scramble stays quick to apply. */
+export const MAX_LENGTH = 60;
+/** Stops a broken random source (e.g. a constant stub) from hanging forever. */
+const MAX_WALKS = 50;
 
 export interface L3EScramble {
   text: string;
@@ -58,7 +62,7 @@ export interface L3EScramble {
 const middleOnly = (unpaired: string[]) => unpaired.every((e) => (MIDDLE_SLOTS as readonly string[]).includes(e));
 
 export function generateL3E(random: Random = Math.random): L3EScramble {
-  for (;;) {
+  for (let walk = 0; walk < MAX_WALKS; walk++) {
     let cube = c5.solved();
     const steps: L3EScramble['steps'] = [];
     let flips = 0;
@@ -72,13 +76,15 @@ export function generateL3E(random: Random = Math.random): L3EScramble {
       steps.push({ ...step, u });
       if (step.kind === 'slice-flip') flips++;
       if (flips >= MIN_SLICE_FLIPS && unpaired.length === 3) {
+        const moves = simplify(steps.flatMap((s) => [...s.u, ...s.moves]));
+        if (moves.length > MAX_LENGTH) break;
         const slots = MIDDLE_SLOTS.filter((e) => unpaired.includes(e));
         const pieces = edgesFor(5)
           .filter((e) => (slots as string[]).includes(e.faces.join('')))
           .flatMap((e) => [...e.pieces]);
-        const moves = simplify(steps.flatMap((s) => [...s.u, ...s.moves]));
         return { text: formatAlg(moves), cube, unpaired: slots, pieces, steps };
       }
     }
   }
+  throw new Error('Could not build a Last 3 Edges scramble: is the random source broken?');
 }

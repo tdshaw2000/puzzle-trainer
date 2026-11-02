@@ -63,6 +63,8 @@ describe('L3E trainer screen', () => {
       const lit = [...root.querySelectorAll<SVGRectElement>('.case svg.scrambled rect')].filter(
         (r) => r.getAttribute('fill') !== RING_COLOUR,
       );
+      const label = root.querySelector('.case svg.scrambled')!.getAttribute('aria-label')!;
+      for (const slot of slots) expect(label).toMatch(new RegExp(`${slot}: lower wing \\w+/\\w+, midge \\w+/\\w+, upper wing \\w+/\\w+`));
       // 3 edges x 3 pieces x 2 stickers
       expect(lit).toHaveLength(18);
       for (const r of lit) {

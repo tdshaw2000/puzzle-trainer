@@ -3,7 +3,7 @@ import { edgesFor, unpairedEdges } from '../../cube/edges';
 import { FACES, NORMAL, sameVec } from '../../cube/geometry';
 import { formatAlg, parseAlg, simplify } from '../../cube/notation';
 import { seeded } from '../../lib/random';
-import { MIDDLE_SLOTS, STEPS, generateL3E } from './generate';
+import { MAX_LENGTH, MIDDLE_SLOTS, STEPS, generateL3E } from './generate';
 
 const c5 = cubeModel(5);
 const EDGES = edgesFor(5);
@@ -70,6 +70,15 @@ describe('generateL3E', () => {
       expect(simplify(moves)).toEqual(moves);
       moves.slice(1).forEach((m, i) => expect(m.face === moves[i].face && m.layer === moves[i].layer).toBe(false));
     }
+  });
+
+  it('keeps scrambles to at most 60 moves', () => {
+    expect(MAX_LENGTH).toBe(60);
+    for (const s of runs) expect(parseAlg(s.text, 5).length).toBeLessThanOrEqual(MAX_LENGTH);
+  });
+
+  it('throws instead of hanging on a constant random source', () => {
+    expect(() => generateL3E(() => 0)).toThrow(/random source/);
   });
 
   it('is built from at least 3 slice-flip steps', () => {
