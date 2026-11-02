@@ -6,11 +6,11 @@ Organises the app's trainers under the puzzle they belong to, so new puzzles and
 ## Requirements
 
 ### Requirement: Trainers are grouped by puzzle
-The app SHALL present its trainers grouped by puzzle. Each puzzle lists the trainers that belong to it. The catalogue SHALL contain two puzzles in this order: "5x5", with the trainers "Last Two Centres", "Last 3 Edges" and "Last Two Edges" in that order, and "4x4", with the trainer "Last Two Edges".
+The app SHALL present its trainers grouped by puzzle. Each puzzle lists the trainers that belong to it. The catalogue SHALL contain two puzzles in this order: "4x4", with the trainer "Last Two Edges", and "5x5", with the trainers "Last Two Centres", "Last 3 Edges" and "Last Two Edges" in that order.
 
 #### Scenario: Home page lists puzzles and their trainers
 - **WHEN** the user opens the app's home page
-- **THEN** the page shows a "5x5" puzzle group followed by a "4x4" puzzle group
+- **THEN** the page shows a "4x4" puzzle group followed by a "5x5" puzzle group
 - **AND** the 5x5 group contains links named "Last Two Centres", "Last 3 Edges" and "Last Two Edges", in that order
 - **AND** the 4x4 group contains a link named "Last Two Edges"
 
