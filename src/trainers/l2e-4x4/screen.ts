@@ -5,7 +5,7 @@ import type { Random } from '../../lib/random';
 import type { L2EScramble } from '../l2e/engine';
 import { mountL2EScreen, type L2EScreenConfig } from '../l2e/screen';
 import { L2E4 } from './cases';
-import { renderNet } from './render';
+import { renderNet } from '../shared/net';
 
 const c4 = cubeModel(4);
 

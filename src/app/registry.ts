@@ -1,5 +1,6 @@
 import { mountL2C } from '../trainers/l2c/screen';
 import { mountL2E } from '../trainers/l2e/screen';
+import { mountL3E } from '../trainers/l3e/screen';
 import { mountL2E4 } from '../trainers/l2e-4x4/screen';
 
 export interface Trainer {
@@ -21,6 +22,7 @@ export const PUZZLES: Puzzle[] = [
     name: '5x5',
     trainers: [
       { id: 'l2c', name: 'Last Two Centres', mount: (c) => mountL2C(c) },
+      { id: 'l3e', name: 'Last 3 Edges', mount: (c) => mountL3E(c) },
       { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E(c) },
     ],
   },

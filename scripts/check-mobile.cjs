@@ -11,11 +11,12 @@ const base = process.argv[2] || 'http://localhost:4173';
   const failures = [];
   page.on('pageerror', (e) => failures.push(`page error: ${e.message}`));
 
-  for (const trainer of ['5x5/l2c', '5x5/l2e', '4x4/l2e']) {
+  for (const trainer of ['5x5/l2c', '5x5/l3e', '5x5/l2e', '4x4/l2e']) {
+    const hasSolution = trainer !== '5x5/l3e';
     await page.goto(`${base}/#/${trainer}`);
     await page.evaluate(() => localStorage.clear());
     await page.reload();
-    await page.click('button.show-solution');
+    if (hasSolution) await page.click('button.show-solution');
     await page.click('text=Show case');
     if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
       failures.push(`${trainer}: horizontal scroll at 375px`);
@@ -30,7 +31,7 @@ const base = process.argv[2] || 'http://localhost:4173';
       failures.push(`${trainer}: horizontal scroll at 375px after hiding the case`);
     }
 
-    for (const button of ['button.next', 'button.show', 'button.show-solution']) {
+    for (const button of ['button.next', 'button.show', ...(hasSolution ? ['button.show-solution'] : [])]) {
       await page.goto(`${base}/#/${trainer}`);
       await page.reload();
       await page.evaluate(() => {
@@ -46,7 +47,7 @@ const base = process.argv[2] || 'http://localhost:4173';
       await page.keyboard.press('Space');
       await page.waitForTimeout(100);
       const changes = await page.evaluate(() => window.changes);
-      const hidden = await page.$eval('.case', (e) => e.hidden) && (await page.$eval('[id$="-solution"]', (e) => e.hidden));
+      const hidden = (await page.$eval('.case', (e) => e.hidden)) && (!hasSolution || (await page.$eval('[id$="-solution"]', (e) => e.hidden)));
       if (changes !== 1) failures.push(`${trainer}: space on ${button} changed the scramble ${changes} times`);
       if (!hidden) failures.push(`${trainer}: space on ${button} left the case or solution shown`);
     }
@@ -58,7 +59,7 @@ const base = process.argv[2] || 'http://localhost:4173';
       await page.evaluate((id) => localStorage.setItem('puzzle-trainer-skin', id), skin);
       await page.goto(`${base}/#/${trainer}`);
       await page.reload({ waitUntil: 'networkidle' });
-      await page.click('button.show-solution');
+      if (hasSolution) await page.click('button.show-solution');
       await page.click('text=Show case');
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) {
         failures.push(`${trainer}: ${skin}: horizontal scroll at 375px`);
