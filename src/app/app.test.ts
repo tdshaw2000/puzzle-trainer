@@ -17,8 +17,8 @@ describe('trainer navigation', () => {
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
-    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Last Two Edges']);
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/l2e']);
+    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
   });
 
   it('opens Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -26,6 +26,13 @@ describe('trainer navigation', () => {
     expect(root.querySelector('[data-trainer="l2e"] .scramble')).not.toBeNull();
     expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last Two Edges');
     expect(document.title).toBe('5x5 Last Two Edges · Puzzle Trainer');
+  });
+
+  it('opens Last 3 Edges from its address, with its breadcrumb and title', () => {
+    const root = show('#/5x5/l3e');
+    expect(root.querySelector('[data-trainer="l3e"] .l3e .scramble')).not.toBeNull();
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last 3 Edges');
+    expect(document.title).toBe('5x5 Last 3 Edges · Puzzle Trainer');
   });
 
   it('opens 4x4 Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -76,7 +83,7 @@ describe('trainer navigation', () => {
       return links[0];
     };
 
-    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/4x4/l2e', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
+    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
       const root = show(hash);
       const a = title(root);
       expect(a.textContent).toBe('Puzzle Trainer');
