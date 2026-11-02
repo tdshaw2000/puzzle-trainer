@@ -10,8 +10,8 @@ function show(hash: string) {
 describe('trainer navigation', () => {
   it('home page lists puzzles with their trainers', () => {
     const root = show('');
-    expect(PUZZLES.map((p) => p.name)).toEqual(['5x5', '4x4']);
-    expect([...root.querySelectorAll('section.puzzle h2')].map((h) => h.textContent)).toEqual(['5x5', '4x4']);
+    expect(PUZZLES.map((p) => p.name)).toEqual(['4x4', '5x5']);
+    expect([...root.querySelectorAll('section.puzzle h2')].map((h) => h.textContent)).toEqual(['4x4', '5x5']);
     const four = [...root.querySelectorAll('[data-puzzle="4x4"] a')];
     expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Edges', '#/4x4/l2e']]);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
