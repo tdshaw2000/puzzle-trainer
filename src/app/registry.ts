@@ -18,6 +18,11 @@ export interface Puzzle {
 
 export const PUZZLES: Puzzle[] = [
   {
+    id: '4x4',
+    name: '4x4',
+    trainers: [{ id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E4(c) }],
+  },
+  {
     id: '5x5',
     name: '5x5',
     trainers: [
@@ -25,10 +30,5 @@ export const PUZZLES: Puzzle[] = [
       { id: 'l3e', name: 'Last 3 Edges', mount: (c) => mountL3E(c) },
       { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E(c) },
     ],
-  },
-  {
-    id: '4x4',
-    name: '4x4',
-    trainers: [{ id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E4(c) }],
   },
 ];
