@@ -50,7 +50,7 @@ const ROTATION: Record<number, Record<string, Array<[Face, Layer, number]>>> = {
 
 /**
  * Splits a whitespace-free chunk into move tokens. A move may be glued only after a rotation or
- * after a move ending in ' or 2 (the sheets' x'U2, U2Rw' and F'R), where the split is unambiguous.
+ * after a move ending in ' or 2 (as some printed algs do, e.g. x'U2), where the split is unambiguous.
  */
 function tokens(chunk: string): Array<[string, string | undefined]> {
   const out: Array<[string, string | undefined]> = [];
