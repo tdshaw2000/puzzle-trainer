@@ -9,7 +9,7 @@ Generates 5x5 scrambles that leave the cube in a random case from the Kewbz last
 ### Requirement: Case pool is the 12 guide cases
 The generator SHALL pick each scramble's case uniformly at random from the 12 cases of the Kewbz 5x5 L2E guide. Cases are numbered 1 to 12 in page order (left to right, top to bottom). Each case SHALL be defined by its pictured state: two edges on the U layer, the guide's front edge (UF in the picture) and back edge (UB in the picture), each made of a left wing, a midge and a right wing.
 
-Each case SHALL carry the alg the trainer shows for it. For cases 2 to 12 this is the guide's alg exactly as printed. For case 1 it is `M U' R' U R' F R F' M'`, because the printed `M' U' R' U R' F R F' M` does not solve the pictured case on a standard cube.
+Each case SHALL carry the alg the trainer shows for it. For cases 2 to 12 this is the guide's alg as printed, except that case 6's `x'U2` (printed without a space) is shown as `x' U2`. For case 1 it is `M U' R' U R' F R F' M'`, because the printed `M' U' R' U R' F R F' M` does not solve the pictured case on a standard cube.
 
 #### Scenario: Every case can be produced
 - **WHEN** many scrambles are generated

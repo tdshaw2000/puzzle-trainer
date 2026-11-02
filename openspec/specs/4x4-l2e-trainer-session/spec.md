@@ -35,11 +35,11 @@ While the case is shown, the toggle SHALL read "Hide case", and using it SHALL h
 - **THEN** every coloured sticker in the picture has the colour that position has after applying the scramble to a solved cube held yellow-top, green-front
 
 ### Requirement: The solution can be shown on demand
-The screen SHALL offer a "Show solution" toggle, separate from "Show case". Using it SHALL show only the case's alg exactly as printed on the sheet, with no picture or case number. While shown, the toggle SHALL read "Hide solution", and using it SHALL hide the solution. It SHALL work independently of "Show case".
+The screen SHALL offer a "Show solution" toggle, separate from "Show case". Using it SHALL show only the case's alg as defined in `4x4-l2e-scramble-generation` (the sheet's, with missing spaces put back), with no picture or case number. While shown, the toggle SHALL read "Hide solution", and using it SHALL hide the solution. It SHALL work independently of "Show case".
 
 #### Scenario: Showing the solution
 - **WHEN** the user selects "Show solution" for a scramble of case N
-- **THEN** case N's alg is shown as printed, and the case is not shown unless it already was
+- **THEN** case N's alg is shown, and the case is not shown unless it already was
 - **AND** the toggle reads "Hide solution"
 
 ### Requirement: Moving to the next scramble

@@ -6,11 +6,11 @@ const ALGS = [
   "Lw' U2 Rw' D2 Rw U2 Rw' D2 Rw2 x'",
   "x' Rw2 D2 Rw' U2 Rw D2 Rw' U2 Lw'",
   "Rw U2 Rw D Rw' U2 Rw D' Rw2'",
-  "Rw2 D Rw' U2 Rw D' Rw' U2Rw'",
-  "R' (Uw' R U R' F R' F'R Uw) R",
+  "Rw2 D Rw' U2 Rw D' Rw' U2 Rw'",
+  "R' (Uw' R U R' F R' F' R Uw) R",
 ];
 
-/** The 5 cases of the CubeSkills "4x4 – Useful Last 2 Edge Algorithms" sheet, main algs as printed. */
+/** The 5 cases of the CubeSkills "4x4 – Useful Last 2 Edge Algorithms" sheet, main algs as printed except for missing spaces, which are put back. */
 export const L2E4_CASES: readonly L2ECase[] = ALGS.map((alg, i) => ({ number: i + 1, alg }));
 
 /** The edge slots each case's picture shows unpaired (sheet frame: yellow U, green F). */

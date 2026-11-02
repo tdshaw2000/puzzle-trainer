@@ -11,7 +11,7 @@ const ALGS = [
   "Rw U2 Rw U2 Rw' U2 Rw U2 Lw' U2 Rw U2 Rw' U2 x' Rw' U2 Rw' U2 M'",
   "Rw' U' R' U R' F R F' Rw",
   "Lw U' R' U R' F R F' Lw'",
-  "Rw2 B2 Rw' U2 Rw' U2' x'U2 Rw' U2' Rw U2 Rw' U2' Rw2",
+  "Rw2 B2 Rw' U2 Rw' U2' x' U2 Rw' U2' Rw U2 Rw' U2' Rw2",
   "Rw U2 Rw2 U2 Rw' U2 Rw U2 Rw' U2 Rw2 U2 Rw",
   "Rw' U2 Rw2 U2 Rw U2 Rw' U2 Rw U2 Rw2 U2 Rw'",
   "Rw' U2 Rw' U2 B2 Rw' B2 Rw' F2 Lw2 F2 Rw U2 Rw2",

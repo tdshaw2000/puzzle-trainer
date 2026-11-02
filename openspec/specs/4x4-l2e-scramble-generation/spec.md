@@ -9,13 +9,13 @@ Generates 4x4 scrambles that leave the cube in a random case from the CubeSkills
 ### Requirement: Case pool is the 5 sheet cases
 The generator SHALL pick each scramble's case uniformly at random from the 5 cases of the CubeSkills sheet "4x4 – Useful Last 2 Edge Algorithms". Cases are numbered 1 to 5 in page order (left to right, top to bottom). Each case SHALL be defined by its pictured state, with the sheet's view: yellow on U, green on F. Its two unpaired edges are UF and UB (cases 1 and 2), UF and UR (cases 3 and 4), or UR and FL (case 5).
 
-Each case SHALL carry the sheet's main alg exactly as printed:
+Each case SHALL carry the sheet's main alg as printed, except that moves the sheet prints without a space between them (`U2Rw'` in case 4, `F'R` in case 5) are shown spaced:
 
 1. `Lw' U2 Rw' D2 Rw U2 Rw' D2 Rw2 x'`
 2. `x' Rw2 D2 Rw' U2 Rw D2 Rw' U2 Lw'`
 3. `Rw U2 Rw D Rw' U2 Rw D' Rw2'`
-4. `Rw2 D Rw' U2 Rw D' Rw' U2Rw'`
-5. `R' (Uw' R U R' F R' F'R Uw) R`
+4. `Rw2 D Rw' U2 Rw D' Rw' U2 Rw'`
+5. `R' (Uw' R U R' F R' F' R Uw) R`
 
 The alternative algs printed under case 1 SHALL NOT be used.
 

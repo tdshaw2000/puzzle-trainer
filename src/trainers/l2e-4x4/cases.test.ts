@@ -38,11 +38,13 @@ describe('4x4 L2E cases', () => {
       "Lw' U2 Rw' D2 Rw U2 Rw' D2 Rw2 x'",
       "x' Rw2 D2 Rw' U2 Rw D2 Rw' U2 Lw'",
       "Rw U2 Rw D Rw' U2 Rw D' Rw2'",
-      "Rw2 D Rw' U2 Rw D' Rw' U2Rw'",
-      "R' (Uw' R U R' F R' F'R Uw) R",
+      "Rw2 D Rw' U2 Rw D' Rw' U2 Rw'",
+      "R' (Uw' R U R' F R' F' R Uw) R",
     ]);
     expect(L2E4_CASES.map((c) => c.number)).toEqual([1, 2, 3, 4, 5]);
     expect(L2E4_CASES.every((c) => c.printedAlg === undefined)).toBe(true);
+    // the sheet's missing spaces are put back, so every move stands on its own
+    expect(L2E4_CASES.every((c) => c.alg.split(/[\s()]+/).filter(Boolean).every((t) => /^([UDFBRL]w?|[xyz])(2'?|')?$/.test(t)))).toBe(true);
   });
 
   it.each([0, 1, 2, 3, 4])('case %i: the inverted alg gives the pictured stickers and unpairs only the pictured edges', (i) => {
