@@ -98,7 +98,11 @@ export function mountL2CScreen(container: HTMLElement, config: L2CScreenConfig, 
   }
 
   function setSolutionShown(shown: boolean) {
-    solution.replaceChildren(...(shown ? current.caseAlgs.map((a) => el('span', 'alg-line', a)) : []));
+    solution.replaceChildren(
+      ...(shown
+        ? current.caseAlgs.flatMap((a, i) => [...(i ? [el('span', 'alg-or', 'OR')] : []), el('span', 'alg-line', a)])
+        : []),
+    );
     solution.hidden = !shown;
     showSolution.textContent = shown ? 'Hide solution' : 'Show solution';
     showSolution.setAttribute('aria-expanded', String(shown));

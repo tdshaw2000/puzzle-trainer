@@ -115,6 +115,7 @@
   .l2e-4x4 .case svg.reference { width: 180px; }
   .l3e .case svg.scrambled { max-width: 300px; }
   .solution .alg-line { display: block; }
+  .solution .alg-or { display: block; color: var(--muted); font-size: 0.85em; letter-spacing: 0.1em; margin: 2px 0; }
   .solution-block { margin: 0 0 16px; }
   .solution-block .solution { margin: 0; }
   .solution-note { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
