@@ -62,6 +62,9 @@ export function cubeModel(size: number): CubeModel {
     const depth = dot(pos, NORMAL[face]);
     if (layer === 'outer') return depth === outer;
     if (layer === 'wide') return depth >= outer - 1;
+    if (layer === 'wide3') return depth >= outer - 2;
+    if (layer === 'inner2') return depth === outer - 1;
+    if (layer === 'inner3') return depth === outer - 2;
     if (size % 2 === 0) throw new Error(`No slice moves on a ${size}x${size}`);
     return depth === 0;
   }

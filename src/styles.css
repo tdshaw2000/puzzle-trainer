@@ -108,11 +108,13 @@
   .case figure { margin: 0; text-align: center; }
   .case svg.scrambled { width: 100%; max-width: 360px; }
   .case svg.reference { width: 90px; }
+  .l2c-6x6 .case svg.reference { width: 110px; }
   .l2e .case svg.scrambled { max-width: 220px; }
   .l2e .case svg.reference { width: 150px; }
   .l2e-4x4 .case svg.scrambled { max-width: 280px; }
   .l2e-4x4 .case svg.reference { width: 180px; }
   .l3e .case svg.scrambled { max-width: 300px; }
+  .solution .alg-line { display: block; }
   .solution-block { margin: 0 0 16px; }
   .solution-block .solution { margin: 0; }
   .solution-note { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
