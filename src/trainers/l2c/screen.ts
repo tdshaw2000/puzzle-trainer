@@ -1,10 +1,11 @@
-import { applyAlg, faceGrid, solvedCube } from '../../cube/cube';
+import { cubeModel } from '../../cube/cube';
 import { FACE_COLOUR } from '../../cube/colours';
 import { invert, parseAlg, type Face } from '../../cube/notation';
 import type { Random } from '../../lib/random';
 import { renderFaces } from './render';
-import { lookalikeCases } from './cases';
-import { generateL2CScramble, type L2CScramble } from './scramble';
+import { lookalikeCases, type L2CCase } from './cases';
+import { generateL2CScramble } from './scramble';
+import type { L2CScramble } from './engine';
 
 const colourName = (f: Face) => FACE_COLOUR[f].name;
 const capitalise = (s: string) => s[0].toUpperCase() + s.slice(1);
@@ -16,14 +17,25 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
   return e;
 }
 
-/** Mounts the 5x5 Last Two Centres trainer. Returns a cleanup function. */
-export function mountL2C(container: HTMLElement, random: Random = Math.random): () => void {
-  const screen = el('section', 'l2c');
+export interface L2CScreenConfig {
+  size: number;
+  caseCount: number;
+  generate: (random: Random) => L2CScramble;
+  lookalikes: (number: number) => L2CCase[];
+  className: string;
+  /** Shows E-slice notes (5x5 only). */
+  sliceNote?: string;
+}
+
+/** Mounts a Last Two Centres trainer screen. Returns a cleanup function. */
+export function mountL2CScreen(container: HTMLElement, config: L2CScreenConfig, random: Random = Math.random): () => void {
+  const model = cubeModel(config.size);
+  const screen = el('section', `l2c ${config.className}`.trim());
   const heading = el('h1', undefined, 'Last Two Centres');
   const hold = el('p', 'hold', 'Scramble holding yellow on top, green in front.');
   const scrambleText = el('p', 'scramble');
   scrambleText.setAttribute('aria-live', 'polite');
-  const sliceNote = el('p', 'slice-note', 'E turns only the central slice, the same way as D.');
+  const sliceNote = el('p', 'slice-note', config.sliceNote ?? '');
   const show = el('button', 'show', 'Show case');
   const showSolution = el('button', 'show-solution', 'Show solution');
   const next = el('button', 'next primary', 'Next');
@@ -53,20 +65,20 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     const labels = el('p', 'face-labels', `${capitalise(colourName(s.left))} (left) · ${capitalise(colourName(s.right))} (right)`);
     const details = el('ul', 'details');
     details.append(
-      el('li', undefined, `Case ${s.caseNumber} of 19`),
+      el('li', undefined, `Case ${s.caseNumber} of ${config.caseCount}${s.caseName ? `: ${s.caseName}` : ''}`),
       el('li', undefined, `Sheet top (U): ${colourName(s.top)}`),
       el('li', undefined, `Sheet front (F): ${colourName(s.front)}`),
       el('li', undefined, `Rotation: ${s.yHint || 'no rotation'} (${colourName(s.left)} to the front)`),
     );
-    for (const other of lookalikeCases(s.caseNumber)) {
+    for (const other of config.lookalikes(s.caseNumber)) {
       details.append(
         el('li', 'lookalike', `Looks the same as case ${other.number} after turning the faces: ${other.alg}`),
       );
     }
 
-    const sheetCube = applyAlg(solvedCube(), invert(parseAlg(s.caseAlg)));
+    const sheetCube = model.applyAlg(model.solved(), invert(parseAlg(s.caseAlg, config.size)));
     const reference = renderFaces(
-      [faceGrid(sheetCube, 'U'), faceGrid(sheetCube, 'F')],
+      [model.faceGrid(sheetCube, 'U'), model.faceGrid(sheetCube, 'F')],
       'vertical',
       (f) => (f === 'U' ? FACE_COLOUR[s.top].hex : FACE_COLOUR[s.front].hex),
     );
@@ -86,7 +98,7 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
   }
 
   function setSolutionShown(shown: boolean) {
-    solution.textContent = shown ? current.caseAlg : '';
+    solution.replaceChildren(...(shown ? current.caseAlgs.map((a) => el('span', 'alg-line', a)) : []));
     solution.hidden = !shown;
     showSolution.textContent = shown ? 'Hide solution' : 'Show solution';
     showSolution.setAttribute('aria-expanded', String(shown));
@@ -100,9 +112,9 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
 
   function newScramble() {
     const focusWasInCase = caseSection.contains(document.activeElement);
-    current = generateL2CScramble(random);
+    current = config.generate(random);
     scrambleText.textContent = current.text;
-    sliceNote.hidden = !/\bE/.test(current.text);
+    sliceNote.hidden = !config.sliceNote || !/\bE/.test(current.text);
     setShown(false);
     caseSection.replaceChildren();
     setSolutionShown(false);
@@ -146,4 +158,20 @@ export function mountL2C(container: HTMLElement, random: Random = Math.random): 
     document.removeEventListener('keydown', onKeyDown);
     document.removeEventListener('keyup', onKeyUp);
   };
+}
+
+/** Mounts the 5x5 Last Two Centres trainer. Returns a cleanup function. */
+export function mountL2C(container: HTMLElement, random: Random = Math.random): () => void {
+  return mountL2CScreen(
+    container,
+    {
+      size: 5,
+      caseCount: 19,
+      generate: generateL2CScramble,
+      lookalikes: lookalikeCases,
+      className: '',
+      sliceNote: 'E turns only the central slice, the same way as D.',
+    },
+    random,
+  );
 }

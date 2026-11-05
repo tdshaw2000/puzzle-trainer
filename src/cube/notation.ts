@@ -1,6 +1,10 @@
 /** Faces in WCA notation. */
 export type Face = 'U' | 'D' | 'F' | 'B' | 'R' | 'L';
-export type Layer = 'outer' | 'wide' | 'slice';
+/**
+ * outer: the face layer; wide: the two outer layers (Rw); slice: the middle layer of an odd cube (M, E, S);
+ * wide3: the three outer layers (3Rw); inner2 / inner3: only the second / third layer from the face (2R, 3R).
+ */
+export type Layer = 'outer' | 'wide' | 'slice' | 'wide3' | 'inner2' | 'inner3';
 
 /**
  * One turn. `face` is the face whose clockwise direction the turn follows.
@@ -29,7 +33,7 @@ export function move(face: Face, layer: Layer, turns: number): Move | null {
   return { face, layer, turns: t as 1 | 2 | 3 };
 }
 
-const TOKEN = /([UDFBRL]w?|[MESxyz])(2'?|')?/y;
+const TOKEN = /([23]?[UDFBRL]w?|[MESxyz])(2'?|')?/y;
 
 /**
  * A whole-cube rotation as layer turns (x follows R, y follows U, z follows F): on the 5x5 the
@@ -45,6 +49,11 @@ const ROTATION: Record<number, Record<string, Array<[Face, Layer, number]>>> = {
     x: [['R', 'wide', 1], ['L', 'wide', -1]],
     y: [['U', 'wide', 1], ['D', 'wide', -1]],
     z: [['F', 'wide', 1], ['B', 'wide', -1]],
+  },
+  6: {
+    x: [['R', 'wide3', 1], ['L', 'wide3', -1]],
+    y: [['U', 'wide3', 1], ['D', 'wide3', -1]],
+    z: [['F', 'wide3', 1], ['B', 'wide3', -1]],
   },
 };
 
@@ -65,7 +74,15 @@ function tokens(chunk: string): Array<[string, string | undefined]> {
   return out;
 }
 
-/** Parses an alg for an N×N cube (5x5 or 4x4). Whole-cube rotations x, y, z are expanded into their layer turns. */
+/** The layer a token like R, Rw, 3Rw, 3R or 2R turns. */
+function baseLayer(base: string): Layer {
+  const wide = base.endsWith('w');
+  const depth = /^\d/.test(base) ? Number(base[0]) : 1;
+  if (wide) return depth >= 3 ? 'wide3' : 'wide';
+  return depth === 3 ? 'inner3' : depth === 2 ? 'inner2' : 'outer';
+}
+
+/** Parses an alg for an N×N cube (4x4, 5x5 or 6x6). Whole-cube rotations x, y, z are expanded into their layer turns. */
 export function parseAlg(alg: string, size = 5): Move[] {
   const rotation = ROTATION[size];
   if (!rotation) throw new Error(`Unsupported cube size: ${size}`);
@@ -81,12 +98,14 @@ export function parseAlg(alg: string, size = 5): Move[] {
         if (size % 2 === 0) throw new Error(`No ${base} slice on a ${size}x${size}`);
         return [move(SLICE_FACE[base], 'slice', turns)!];
       }
-      return [move(base[0] as Face, base.length > 1 ? 'wide' : 'outer', turns)!];
+      return [move(base.match(/[UDFBRL]/)![0] as Face, baseLayer(base), turns)!];
     });
 }
 
+const LAYER_PREFIX: Record<Layer, string> = { outer: '', wide: '', slice: '', wide3: '3', inner2: '2', inner3: '3' };
+
 export function formatMove(m: Move): string {
-  const base = m.layer === 'slice' ? SLICE_NAME[m.face]! : m.face + (m.layer === 'wide' ? 'w' : '');
+  const base = m.layer === 'slice' ? SLICE_NAME[m.face]! : LAYER_PREFIX[m.layer] + m.face + (m.layer === 'wide' || m.layer === 'wide3' ? 'w' : '');
   return base + (m.turns === 1 ? '' : m.turns === 2 ? '2' : "'");
 }
 

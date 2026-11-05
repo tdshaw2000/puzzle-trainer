@@ -10,8 +10,10 @@ function show(hash: string) {
 describe('trainer navigation', () => {
   it('home page lists puzzles with their trainers', () => {
     const root = show('');
-    expect(PUZZLES.map((p) => p.name)).toEqual(['4x4', '5x5']);
-    expect([...root.querySelectorAll('section.puzzle h2')].map((h) => h.textContent)).toEqual(['4x4', '5x5']);
+    expect(PUZZLES.map((p) => p.name)).toEqual(['4x4', '5x5', '6x6']);
+    expect([...root.querySelectorAll('section.puzzle h2')].map((h) => h.textContent)).toEqual(['4x4', '5x5', '6x6']);
+    const six = [...root.querySelectorAll('[data-puzzle="6x6"] a')];
+    expect(six.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Centres', '#/6x6/l2c']]);
     const four = [...root.querySelectorAll('[data-puzzle="4x4"] a')];
     expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Edges', '#/4x4/l2e']]);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
@@ -33,6 +35,13 @@ describe('trainer navigation', () => {
     expect(root.querySelector('[data-trainer="l3e"] .l3e .scramble')).not.toBeNull();
     expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last 3 Edges');
     expect(document.title).toBe('5x5 Last 3 Edges · Puzzle Trainer');
+  });
+
+  it('opens 6x6 Last Two Centres from its address, with its breadcrumb and title', () => {
+    const root = show('#/6x6/l2c');
+    expect(root.querySelector('[data-trainer="l2c"] .l2c-6x6 .scramble')).not.toBeNull();
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('6x6 › Last Two Centres');
+    expect(document.title).toBe('6x6 Last Two Centres · Puzzle Trainer');
   });
 
   it('opens 4x4 Last Two Edges from its address, with its breadcrumb and title', () => {
