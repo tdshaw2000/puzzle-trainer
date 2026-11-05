@@ -36,8 +36,8 @@ describe('6x6 L2C scramble', () => {
         const next = moves[j + 1];
         if (next) expect(next.face === m.face && next.layer === m.layer).toBe(false);
       });
-      // Not longer than the longest alg plus the two orientation turns.
-      expect(moves.length).toBeLessThanOrEqual(16);
+      // Not longer than the longest alg (13 moves) plus the two orientation turns.
+      expect(moves.length).toBeLessThanOrEqual(15);
     }
   });
 

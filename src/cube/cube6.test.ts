@@ -59,6 +59,11 @@ describe('6x6 simulator', () => {
 });
 
 describe('notation unchanged for 4x4 and 5x5', () => {
+  it('keeps 5x5 slices and wide moves distinct from the new layers', () => {
+    expect(formatAlg(parseAlg("M 3R 3Rw", 5))).toBe('M 3R 3Rw');
+    expect(parseAlg('M', 5)).not.toEqual(parseAlg('3R', 5));
+  });
+
   it('still reads Rw, M and glued tokens', () => {
     expect(formatAlg(parseAlg("Rw U2Rw' M"))).toBe("Rw U2 Rw' M");
     expect(() => parseAlg('RU')).toThrow();

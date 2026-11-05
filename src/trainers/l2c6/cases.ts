@@ -11,7 +11,7 @@ interface SheetCase {
 
 /**
  * The 32 distinct cases of the SpeedCubeDB "6x6 Last Two Centers" sheet, in sheet order. The sheet prints 33 entries;
- * "Pair and a Nice 3 Bar" and the first "L and a Bar" are the same picture and alg, so they are one case here (19).
+ * "Pair and a Nice 3 Bar" and the first "L and a Bar" are the same picture and alg, so they are one case here, number 19.
  * Algs are as printed.
  */
 export const SHEET_CASES: readonly SheetCase[] = [
