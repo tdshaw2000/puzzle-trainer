@@ -60,6 +60,10 @@ describe('6x6 L2C trainer screen', () => {
       button('Show solution').click();
       const lines = [...solution().querySelectorAll('.alg-line')].map((l) => l.textContent!);
       expect(lines).toEqual(L2C6_CASES[n - 1].algs);
+      // Several algs are separated by an "OR" line, so they don't read as one long alg.
+      expect([...solution().children].map((c) => c.textContent)).toEqual(
+        L2C6_CASES[n - 1].algs.flatMap((a, i) => (i ? ['OR', a] : [a])),
+      );
       expect(button('Hide solution')).toBeDefined();
       if (n <= 2) seen.set(n, lines);
     }
