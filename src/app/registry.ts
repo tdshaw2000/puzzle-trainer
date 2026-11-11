@@ -2,6 +2,7 @@ import { mountL2C } from '../trainers/l2c/screen';
 import { mountL2E } from '../trainers/l2e/screen';
 import { mountL3E } from '../trainers/l3e/screen';
 import { mountL2E4 } from '../trainers/l2e-4x4/screen';
+import { mountPairing4 } from '../trainers/pairing-4x4/screen';
 import { mountL2C6 } from '../trainers/l2c6/screen';
 
 export interface Trainer {
@@ -21,7 +22,10 @@ export const PUZZLES: Puzzle[] = [
   {
     id: '4x4',
     name: '4x4',
-    trainers: [{ id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E4(c) }],
+    trainers: [
+      { id: 'pairing', name: 'Edge Pairing', mount: (c) => mountPairing4(c) },
+      { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E4(c) },
+    ],
   },
   {
     id: '5x5',
