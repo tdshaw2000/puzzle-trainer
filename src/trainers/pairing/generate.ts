@@ -7,7 +7,7 @@ import { STEPS, type Step } from '../l3e/generate';
 
 /**
  * Edge Pairing: the start of the Hoya edge-pairing stage. A scramble is a run of pairing
- * steps undone from solved (the same steps as the 5x5 Last 3 Edges trainer; moves do not depend
+ * steps undone from solved (the same steps as the 5x5 Last Three Edges trainer; moves do not depend
  * on cube size), keeping the centres and the white cross solved throughout.
  */
 

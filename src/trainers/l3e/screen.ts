@@ -34,11 +34,11 @@ function describe(s: L3EScramble): string {
     .join('; ');
 }
 
-/** Mounts the 5x5 Last 3 Edges trainer. Returns a cleanup function. */
+/** Mounts the 5x5 Last Three Edges trainer. Returns a cleanup function. */
 export function mountL3E(container: HTMLElement, random: Random = Math.random): () => void {
   // shares the Last Two Edges screen's layout and skin styles
   const screen = el('section', 'l2e l3e');
-  const heading = el('h1', undefined, 'Last 3 Edges');
+  const heading = el('h1', undefined, 'Last Three Edges');
   const hold = el('p', 'hold', 'Scramble holding yellow on top, green in front.');
   const scrambleText = el('p', 'scramble');
   scrambleText.setAttribute('aria-live', 'polite');

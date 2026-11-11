@@ -6,7 +6,7 @@ import { SIDE_ORDER, frameRotation, rewrite } from '../../cube/rotation';
 import { pick, type Random } from '../../lib/random';
 
 /**
- * 5x5 Last 3 Edges: the last stage of Hoya 3-2-3 edge pairing. A scramble is a short run of
+ * 5x5 Last Three Edges: the last stage of Hoya 3-2-3 edge pairing. A scramble is a short run of
  * pairing steps undone from solved, keeping the centres and the white cross solved throughout.
  */
 
@@ -86,5 +86,5 @@ export function generateL3E(random: Random = Math.random): L3EScramble {
       }
     }
   }
-  throw new Error('Could not build a Last 3 Edges scramble: is the random source broken?');
+  throw new Error('Could not build a Last Three Edges scramble: is the random source broken?');
 }

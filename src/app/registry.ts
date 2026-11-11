@@ -33,9 +33,9 @@ export const PUZZLES: Puzzle[] = [
     id: '5x5',
     name: '5x5',
     trainers: [
-      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing5(c) },
       { id: 'l2c', name: 'Last Two Centres', mount: (c) => mountL2C(c) },
-      { id: 'l3e', name: 'Last 3 Edges', mount: (c) => mountL3E(c) },
+      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing5(c) },
+      { id: 'l3e', name: 'Last Three Edges', mount: (c) => mountL3E(c) },
       { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E(c) },
     ],
   },
@@ -43,8 +43,8 @@ export const PUZZLES: Puzzle[] = [
     id: '6x6',
     name: '6x6',
     trainers: [
-      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing6(c) },
       { id: 'l2c', name: 'Last Two Centres', mount: (c) => mountL2C6(c) },
+      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing6(c) },
     ],
   },
 ];

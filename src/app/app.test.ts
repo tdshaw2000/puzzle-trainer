@@ -13,14 +13,14 @@ describe('trainer navigation', () => {
     expect(PUZZLES.map((p) => p.name)).toEqual(['4x4', '5x5', '6x6']);
     expect([...root.querySelectorAll('section.puzzle h2')].map((h) => h.textContent)).toEqual(['4x4', '5x5', '6x6']);
     const six = [...root.querySelectorAll('[data-puzzle="6x6"] a')];
-    expect(six.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Edge Pairing - Hoya', '#/6x6/pairing'], ['Last Two Centres', '#/6x6/l2c']]);
+    expect(six.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Centres', '#/6x6/l2c'], ['Edge Pairing - Hoya', '#/6x6/pairing']]);
     const four = [...root.querySelectorAll('[data-puzzle="4x4"] a')];
     expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Edge Pairing - Hoya', '#/4x4/pairing'], ['Last Two Edges', '#/4x4/l2e']]);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
-    expect(links.map((a) => a.textContent)).toEqual(['Edge Pairing - Hoya', 'Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/pairing', '#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
+    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Edge Pairing - Hoya', 'Last Three Edges', 'Last Two Edges']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/pairing', '#/5x5/l3e', '#/5x5/l2e']);
   });
 
   it('opens Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -30,11 +30,11 @@ describe('trainer navigation', () => {
     expect(document.title).toBe('5x5 Last Two Edges · Puzzle Trainer');
   });
 
-  it('opens Last 3 Edges from its address, with its breadcrumb and title', () => {
+  it('opens Last Three Edges from its address, with its breadcrumb and title', () => {
     const root = show('#/5x5/l3e');
     expect(root.querySelector('[data-trainer="l3e"] .l3e .scramble')).not.toBeNull();
-    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last 3 Edges');
-    expect(document.title).toBe('5x5 Last 3 Edges · Puzzle Trainer');
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last Three Edges');
+    expect(document.title).toBe('5x5 Last Three Edges · Puzzle Trainer');
   });
 
   it('opens 6x6 Edge Pairing - Hoya from its address, with its breadcrumb', () => {
@@ -84,7 +84,7 @@ describe('trainer navigation', () => {
     const root = show('');
     const href = root.querySelector<HTMLAnchorElement>('[data-puzzle="5x5"] a')!.getAttribute('href')!;
     renderRoute(root, href);
-    expect(root.querySelector('[data-trainer="pairing"] .scramble')).not.toBeNull();
+    expect(root.querySelector('[data-trainer="l2c"] .scramble')).not.toBeNull();
   });
 
   it('#/ is also the home page', () => {
