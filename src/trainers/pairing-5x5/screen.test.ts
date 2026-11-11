@@ -26,7 +26,7 @@ describe('Edge Pairing 5x5 screen', () => {
   it('shows a scramble and the holding reminder, with the case hidden and no solution control', () => {
     const { root, scramble, caseSection, button } = mount();
     expect(scramble()).toMatch(/^[UDFBRLw2' ]+$/);
-    expect(root.querySelector('h1')!.textContent).toBe('Edge Pairing');
+    expect(root.querySelector('h1')!.textContent).toBe('Edge Pairing - Hoya');
     expect(root.textContent).toContain('yellow on top, green in front');
     expect(caseSection().hidden).toBe(true);
     expect(button('Show case').getAttribute('aria-expanded')).toBe('false');

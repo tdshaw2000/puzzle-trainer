@@ -15,11 +15,11 @@ describe('trainer navigation', () => {
     const six = [...root.querySelectorAll('[data-puzzle="6x6"] a')];
     expect(six.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Centres', '#/6x6/l2c']]);
     const four = [...root.querySelectorAll('[data-puzzle="4x4"] a')];
-    expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Edge Pairing', '#/4x4/pairing'], ['Last Two Edges', '#/4x4/l2e']]);
+    expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Edge Pairing - Hoya', '#/4x4/pairing'], ['Last Two Edges', '#/4x4/l2e']]);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
-    expect(links.map((a) => a.textContent)).toEqual(['Edge Pairing', 'Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
+    expect(links.map((a) => a.textContent)).toEqual(['Edge Pairing - Hoya', 'Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
     expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/pairing', '#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
   });
 
@@ -44,18 +44,18 @@ describe('trainer navigation', () => {
     expect(document.title).toBe('6x6 Last Two Centres · Puzzle Trainer');
   });
 
-  it('opens 5x5 Edge Pairing from its address, with its breadcrumb', () => {
+  it('opens 5x5 Edge Pairing - Hoya from its address, with its breadcrumb', () => {
     const root = show('#/5x5/pairing');
     expect(root.querySelector('[data-trainer="pairing"] .pairing-5x5 .scramble')).not.toBeNull();
-    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Edge Pairing');
-    expect(document.title).toBe('5x5 Edge Pairing · Puzzle Trainer');
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Edge Pairing - Hoya');
+    expect(document.title).toBe('5x5 Edge Pairing - Hoya · Puzzle Trainer');
   });
 
-  it('opens 4x4 Edge Pairing from its address, with its breadcrumb', () => {
+  it('opens 4x4 Edge Pairing - Hoya from its address, with its breadcrumb', () => {
     const root = show('#/4x4/pairing');
     expect(root.querySelector('[data-trainer="pairing"] .pairing-4x4 .scramble')).not.toBeNull();
-    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('4x4 › Edge Pairing');
-    expect(document.title).toBe('4x4 Edge Pairing · Puzzle Trainer');
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('4x4 › Edge Pairing - Hoya');
+    expect(document.title).toBe('4x4 Edge Pairing - Hoya · Puzzle Trainer');
   });
 
   it('opens 4x4 Last Two Edges from its address, with its breadcrumb and title', () => {
