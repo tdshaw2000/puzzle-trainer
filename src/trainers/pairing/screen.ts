@@ -1,6 +1,6 @@
 import { FACE_COLOUR } from '../../cube/colours';
 import { cubeModel } from '../../cube/cube';
-import { edgesFor } from '../../cube/edges';
+import { edgeName, edgesFor } from '../../cube/edges';
 import { NORMAL } from '../../cube/geometry';
 import type { Face } from '../../cube/notation';
 import type { Random } from '../../lib/random';
@@ -21,10 +21,10 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
 function describe(s: PairingScramble, size: number): string {
   const model = cubeModel(size);
   return edgesFor(size)
-    .filter((e) => s.unpaired.includes(e.faces.join('')))
+    .filter((e) => s.unpaired.includes(edgeName(e)))
     .map((e) => {
       const pieces = e.pieces.map((p) => e.faces.map((f) => FACE_COLOUR[model.stickerAt(s.cube, p, NORMAL[f])].name).join('/'));
-      return `${e.faces.join('')}: ${pieces.join(', ')}`;
+      return `${edgeName(e)}: ${pieces.join(', ')}`;
     })
     .join('; ');
 }
