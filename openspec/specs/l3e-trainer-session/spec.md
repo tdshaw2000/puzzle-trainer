@@ -2,15 +2,15 @@
 
 ## Purpose
 
-Defines the practice loop on the 5x5 Last 3 Edges screen: show a scramble, let the user reveal (and hide again) the case, then move on to the next scramble.
+Defines the practice loop on the 5x5 Last Three Edges screen: show a scramble, let the user reveal (and hide again) the case, then move on to the next scramble.
 
 ## Requirements
 
 ### Requirement: A scramble is shown on arrival
-When the Last 3 Edges screen opens, it SHALL show a freshly generated scramble in a large, readable font, with the reminder to hold the cube with yellow on top and green in front. The case SHALL be hidden.
+When the Last Three Edges screen opens, it SHALL show a freshly generated scramble in a large, readable font, with the reminder to hold the cube with yellow on top and green in front. The case SHALL be hidden.
 
 #### Scenario: Opening the trainer
-- **WHEN** the user opens 5x5 › Last 3 Edges
+- **WHEN** the user opens 5x5 › Last Three Edges
 - **THEN** a scramble is displayed
 - **AND** the toggle reads "Show case"
 - **AND** there is no "Show solution" control

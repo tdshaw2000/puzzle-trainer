@@ -6,12 +6,12 @@ Organises the app's trainers under the puzzle they belong to, so new puzzles and
 ## Requirements
 
 ### Requirement: Trainers are grouped by puzzle
-The app SHALL present its trainers grouped by puzzle. Each puzzle lists the trainers that belong to it. The catalogue SHALL contain three puzzles in this order: "4x4", with the trainers "Edge Pairing" and "Last Two Edges" in that order, "5x5", with the trainers "Last Two Centres", "Last 3 Edges" and "Last Two Edges" in that order, and "6x6", with the trainer "Last Two Centres".
+The app SHALL present its trainers grouped by puzzle. Each puzzle lists the trainers that belong to it. The catalogue SHALL contain three puzzles in this order: "4x4", with the trainers "Edge Pairing" and "Last Two Edges" in that order, "5x5", with the trainers "Last Two Centres", "Edge Pairing - Hoya", "Last Three Edges" and "Last Two Edges" in that order, and "6x6", with the trainer "Last Two Centres".
 
 #### Scenario: Home page lists puzzles and their trainers
 - **WHEN** the user opens the app's home page
 - **THEN** the page shows a "4x4" puzzle group followed by a "5x5" puzzle group
-- **AND** the 5x5 group contains links named "Last Two Centres", "Last 3 Edges" and "Last Two Edges", in that order
+- **AND** the 5x5 group contains links named "Last Two Centres", "Edge Pairing - Hoya", "Last Three Edges" and "Last Two Edges", in that order
 - **AND** the 4x4 group contains links named "Edge Pairing" and "Last Two Edges", in that order
 
 #### Scenario: The 6x6 group
@@ -19,14 +19,14 @@ The app SHALL present its trainers grouped by puzzle. Each puzzle lists the trai
 - **THEN** a "6x6" group follows "5x5" and contains a link named "Last Two Centres"
 
 #### Scenario: Selecting a trainer opens it
-- **WHEN** the user selects "Last 3 Edges" under "5x5"
-- **THEN** the Last 3 Edges trainer screen opens
+- **WHEN** the user selects "Last Three Edges" under "5x5"
+- **THEN** the Last Three Edges trainer screen opens
 ### Requirement: Each trainer has a stable, bookmarkable address
-Each trainer SHALL be reachable at an address made of its puzzle and trainer identifiers, and opening that address directly SHALL open the trainer. The 5x5 Last Two Centres trainer SHALL live at `#/5x5/l2c`, the 5x5 Last 3 Edges trainer at `#/5x5/l3e`, the 5x5 Last Two Edges trainer at `#/5x5/l2e`, the 4x4 Edge Pairing trainer at `#/4x4/pairing`, the 4x4 Last Two Edges trainer at `#/4x4/l2e`, and the 6x6 Last Two Centres trainer at `#/6x6/l2c`.
+Each trainer SHALL be reachable at an address made of its puzzle and trainer identifiers, and opening that address directly SHALL open the trainer. The 5x5 Last Two Centres trainer SHALL live at `#/5x5/l2c`, the 5x5 Last Three Edges trainer at `#/5x5/l3e`, the 5x5 Last Two Edges trainer at `#/5x5/l2e`, the 4x4 Edge Pairing trainer at `#/4x4/pairing`, the 4x4 Last Two Edges trainer at `#/4x4/l2e`, and the 6x6 Last Two Centres trainer at `#/6x6/l2c`.
 
 #### Scenario: Opening the trainer address directly
 - **WHEN** the user loads the app at `#/5x5/l3e`
-- **THEN** the Last 3 Edges trainer screen opens without going through the home page
+- **THEN** the Last Three Edges trainer screen opens without going through the home page
 
 #### Scenario: Unknown address
 - **WHEN** the user loads an address that matches no puzzle or trainer
