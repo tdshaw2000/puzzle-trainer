@@ -38,7 +38,7 @@ export function mountPairing(
 ): () => void {
   // shares the Last Two Edges screen's layout and skin styles
   const screen = el('section', `l2e ${className}`);
-  const heading = el('h1', undefined, 'Edge Pairing');
+  const heading = el('h1', undefined, 'Edge Pairing - Hoya');
   const hold = el('p', 'hold', 'Scramble holding yellow on top, green in front.');
   const scrambleText = el('p', 'scramble');
   scrambleText.setAttribute('aria-live', 'polite');

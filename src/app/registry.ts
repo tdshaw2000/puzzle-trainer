@@ -24,7 +24,7 @@ export const PUZZLES: Puzzle[] = [
     id: '4x4',
     name: '4x4',
     trainers: [
-      { id: 'pairing', name: 'Edge Pairing', mount: (c) => mountPairing4(c) },
+      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing4(c) },
       { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E4(c) },
     ],
   },
@@ -32,7 +32,7 @@ export const PUZZLES: Puzzle[] = [
     id: '5x5',
     name: '5x5',
     trainers: [
-      { id: 'pairing', name: 'Edge Pairing', mount: (c) => mountPairing5(c) },
+      { id: 'pairing', name: 'Edge Pairing - Hoya', mount: (c) => mountPairing5(c) },
       { id: 'l2c', name: 'Last Two Centres', mount: (c) => mountL2C(c) },
       { id: 'l3e', name: 'Last 3 Edges', mount: (c) => mountL3E(c) },
       { id: 'l2e', name: 'Last Two Edges', mount: (c) => mountL2E(c) },
