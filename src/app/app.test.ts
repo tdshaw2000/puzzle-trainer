@@ -19,8 +19,8 @@ describe('trainer navigation', () => {
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
-    expect(links.map((a) => a.textContent)).toEqual(['Edge Pairing - Hoya', 'Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/pairing', '#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
+    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Edge Pairing - Hoya', 'Last Three Edges', 'Last Two Edges']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/pairing', '#/5x5/l3e', '#/5x5/l2e']);
   });
 
   it('opens Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -30,11 +30,11 @@ describe('trainer navigation', () => {
     expect(document.title).toBe('5x5 Last Two Edges · Puzzle Trainer');
   });
 
-  it('opens Last 3 Edges from its address, with its breadcrumb and title', () => {
+  it('opens Last Three Edges from its address, with its breadcrumb and title', () => {
     const root = show('#/5x5/l3e');
     expect(root.querySelector('[data-trainer="l3e"] .l3e .scramble')).not.toBeNull();
-    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last 3 Edges');
-    expect(document.title).toBe('5x5 Last 3 Edges · Puzzle Trainer');
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Last Three Edges');
+    expect(document.title).toBe('5x5 Last Three Edges · Puzzle Trainer');
   });
 
   it('opens 6x6 Last Two Centres from its address, with its breadcrumb and title', () => {
@@ -77,7 +77,7 @@ describe('trainer navigation', () => {
     const root = show('');
     const href = root.querySelector<HTMLAnchorElement>('[data-puzzle="5x5"] a')!.getAttribute('href')!;
     renderRoute(root, href);
-    expect(root.querySelector('[data-trainer="pairing"] .scramble')).not.toBeNull();
+    expect(root.querySelector('[data-trainer="l2c"] .scramble')).not.toBeNull();
   });
 
   it('#/ is also the home page', () => {

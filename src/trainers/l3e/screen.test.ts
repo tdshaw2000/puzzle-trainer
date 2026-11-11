@@ -27,7 +27,7 @@ describe('L3E trainer screen', () => {
   it('shows a scramble and the holding reminder, with the case hidden and no solution control', () => {
     const { root, scramble, caseSection, button } = mount();
     expect(scramble()).toMatch(/^[UDFBRLw2' ]+$/);
-    expect(root.querySelector('h1')!.textContent).toBe('Last 3 Edges');
+    expect(root.querySelector('h1')!.textContent).toBe('Last Three Edges');
     expect(root.textContent).toContain('yellow on top, green in front');
     expect(caseSection().hidden).toBe(true);
     expect(button('Show case').getAttribute('aria-expanded')).toBe('false');
