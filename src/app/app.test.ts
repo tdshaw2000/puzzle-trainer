@@ -15,7 +15,7 @@ describe('trainer navigation', () => {
     const six = [...root.querySelectorAll('[data-puzzle="6x6"] a')];
     expect(six.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Centres', '#/6x6/l2c']]);
     const four = [...root.querySelectorAll('[data-puzzle="4x4"] a')];
-    expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Last Two Edges', '#/4x4/l2e']]);
+    expect(four.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([['Edge Pairing', '#/4x4/pairing'], ['Last Two Edges', '#/4x4/l2e']]);
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
@@ -42,6 +42,13 @@ describe('trainer navigation', () => {
     expect(root.querySelector('[data-trainer="l2c"] .l2c-6x6 .scramble')).not.toBeNull();
     expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('6x6 › Last Two Centres');
     expect(document.title).toBe('6x6 Last Two Centres · Puzzle Trainer');
+  });
+
+  it('opens 4x4 Edge Pairing from its address, with its breadcrumb', () => {
+    const root = show('#/4x4/pairing');
+    expect(root.querySelector('[data-trainer="pairing"] .pairing-4x4 .scramble')).not.toBeNull();
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('4x4 › Edge Pairing');
+    expect(document.title).toBe('4x4 Edge Pairing · Puzzle Trainer');
   });
 
   it('opens 4x4 Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -92,7 +99,7 @@ describe('trainer navigation', () => {
       return links[0];
     };
 
-    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
+    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/4x4/pairing', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
       const root = show(hash);
       const a = title(root);
       expect(a.textContent).toBe('Puzzle Trainer');
