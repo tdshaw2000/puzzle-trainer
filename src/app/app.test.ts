@@ -46,8 +46,9 @@ describe('trainer navigation', () => {
 
   it('opens 4x4 Edge Pairing from its address, with its breadcrumb', () => {
     const root = show('#/4x4/pairing');
-    expect(root.querySelector('.pairing-4x4 .scramble')).not.toBeNull();
+    expect(root.querySelector('[data-trainer="pairing"] .pairing-4x4 .scramble')).not.toBeNull();
     expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('4x4 › Edge Pairing');
+    expect(document.title).toBe('4x4 Edge Pairing · Puzzle Trainer');
   });
 
   it('opens 4x4 Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -98,7 +99,7 @@ describe('trainer navigation', () => {
       return links[0];
     };
 
-    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
+    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/4x4/pairing', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
       const root = show(hash);
       const a = title(root);
       expect(a.textContent).toBe('Puzzle Trainer');
