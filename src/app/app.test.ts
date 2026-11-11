@@ -19,8 +19,8 @@ describe('trainer navigation', () => {
     const group = root.querySelector('[data-puzzle="5x5"]')!;
     expect(group.querySelector('h2')!.textContent).toBe('5x5');
     const links = [...group.querySelectorAll('a')];
-    expect(links.map((a) => a.textContent)).toEqual(['Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
+    expect(links.map((a) => a.textContent)).toEqual(['Edge Pairing', 'Last Two Centres', 'Last 3 Edges', 'Last Two Edges']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#/5x5/pairing', '#/5x5/l2c', '#/5x5/l3e', '#/5x5/l2e']);
   });
 
   it('opens Last Two Edges from its address, with its breadcrumb and title', () => {
@@ -42,6 +42,13 @@ describe('trainer navigation', () => {
     expect(root.querySelector('[data-trainer="l2c"] .l2c-6x6 .scramble')).not.toBeNull();
     expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('6x6 › Last Two Centres');
     expect(document.title).toBe('6x6 Last Two Centres · Puzzle Trainer');
+  });
+
+  it('opens 5x5 Edge Pairing from its address, with its breadcrumb', () => {
+    const root = show('#/5x5/pairing');
+    expect(root.querySelector('[data-trainer="pairing"] .pairing-5x5 .scramble')).not.toBeNull();
+    expect(root.querySelector('nav.breadcrumb')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5x5 › Edge Pairing');
+    expect(document.title).toBe('5x5 Edge Pairing · Puzzle Trainer');
   });
 
   it('opens 4x4 Edge Pairing from its address, with its breadcrumb', () => {
@@ -70,7 +77,7 @@ describe('trainer navigation', () => {
     const root = show('');
     const href = root.querySelector<HTMLAnchorElement>('[data-puzzle="5x5"] a')!.getAttribute('href')!;
     renderRoute(root, href);
-    expect(root.querySelector('[data-trainer="l2c"] .scramble')).not.toBeNull();
+    expect(root.querySelector('[data-trainer="pairing"] .scramble')).not.toBeNull();
   });
 
   it('#/ is also the home page', () => {
@@ -99,7 +106,7 @@ describe('trainer navigation', () => {
       return links[0];
     };
 
-    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/4x4/pairing', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
+    it.each(['', '#/', '#/5x5/l2c', '#/5x5/l2e', '#/5x5/l3e', '#/4x4/l2e', '#/4x4/pairing', '#/5x5/pairing', '#/whatever'])('%s shows "Puzzle Trainer" first, linking home', (hash) => {
       const root = show(hash);
       const a = title(root);
       expect(a.textContent).toBe('Puzzle Trainer');
